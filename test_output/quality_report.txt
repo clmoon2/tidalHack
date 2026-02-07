@@ -1,0 +1,75 @@
+================================================================================
+ILI DATA QUALITY REPORT
+================================================================================
+
+Run ID: RUN1
+Source File: data/test.csv
+Generated: 2026-02-07T16:23:23.872886
+
+--------------------------------------------------------------------------------
+SUMMARY
+--------------------------------------------------------------------------------
+Total Records: 10
+Anomalies: 5
+Reference Points: 5
+Validation Status: PASSED
+Data Quality Score: 100.0/100
+
+--------------------------------------------------------------------------------
+VALIDATION RESULTS
+--------------------------------------------------------------------------------
+Valid Records: 5/5
+Invalid Records: 0
+
+--------------------------------------------------------------------------------
+IMPUTATION LOG
+--------------------------------------------------------------------------------
+Actions Performed: 3
+
+Imputation Actions:
+  • Imputed 2 missing clock_position values using forward-fill
+  • Imputed 1 missing length values using median (4.50 inches)
+  • Imputed 1 missing width values using median (2.50 inches)
+
+--------------------------------------------------------------------------------
+ANOMALY STATISTICS
+--------------------------------------------------------------------------------
+Total Anomalies: 5
+
+By Type:
+  external_corrosion: 3
+  internal_corrosion: 1
+  dent: 1
+
+Depth Statistics:
+  Min: 25.00%
+  Max: 85.00%
+  Mean: 49.00%
+  Median: 45.00%
+  Critical (>80%): 1
+  High (50-80%): 1
+  Moderate (30-50%): 2
+  Low (<30%): 1
+
+--------------------------------------------------------------------------------
+REFERENCE POINTS
+--------------------------------------------------------------------------------
+Total Reference Points: 5
+
+By Type:
+  girth_weld: 3
+  valve: 1
+  tee: 1
+
+--------------------------------------------------------------------------------
+RECOMMENDATIONS
+--------------------------------------------------------------------------------
+ℹ️  INFO: 3 imputation actions were performed. Review imputation log to understand data transformations.
+
+⚠️  WARNING: Only 5 reference points found. Alignment quality may be affected. Minimum 10 reference points recommended.
+
+🚨 ALERT: 1 anomalies have depth > 80% (critical threshold). Immediate action may be required per 49 CFR 192.933.
+
+✅ EXCELLENT: Data quality score is 100.0/100. Data is ready for alignment and matching.
+
+================================================================================

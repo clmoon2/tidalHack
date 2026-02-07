@@ -1,0 +1,151 @@
+{
+  "metadata": {
+    "run_id": "RUN1",
+    "file_path": "data/test.csv",
+    "generated_at": "2026-02-07T16:23:23.872886",
+    "report_version": "1.0"
+  },
+  "summary": {
+    "total_records": 10,
+    "anomaly_count": 5,
+    "reference_point_count": 5,
+    "validation_status": "PASSED",
+    "data_quality_score": 100.0
+  },
+  "validation": {
+    "passed": true,
+    "total_records": 5,
+    "valid_records": 5,
+    "invalid_records": 0,
+    "errors": [],
+    "warnings": [],
+    "required_fields_present": true,
+    "missing_fields": [],
+    "range_validation_errors": []
+  },
+  "data_quality": {
+    "completeness": {
+      "id": 100.0,
+      "run_id": 100.0,
+      "distance": 100.0,
+      "clock_position": 100.0,
+      "depth_pct": 100.0,
+      "length": 100.0,
+      "width": 100.0,
+      "feature_type": 100.0,
+      "coating_type": 60.0,
+      "inspection_date": 100.0
+    },
+    "validity": {
+      "percentage": 100.0,
+      "valid_count": 5,
+      "invalid_count": 0
+    },
+    "consistency": {
+      "clock_position_valid_pct": 100.0,
+      "depth_pct_valid_pct": 100.0
+    },
+    "anomaly_metrics": {
+      "depth_pct_min": 25.0,
+      "depth_pct_max": 85.0,
+      "depth_pct_mean": 49.0,
+      "feature_type_distribution": {
+        "external_corrosion": 3,
+        "internal_corrosion": 1,
+        "dent": 1
+      }
+    },
+    "missing_values": {
+      "coating_type": {
+        "count": 2,
+        "percentage": 40.0
+      }
+    }
+  },
+  "imputation": {
+    "actions_performed": 3,
+    "log": [
+      "Imputed 2 missing clock_position values using forward-fill",
+      "Imputed 1 missing length values using median (4.50 inches)",
+      "Imputed 1 missing width values using median (2.50 inches)"
+    ],
+    "summary": {
+      "total_actions": 3,
+      "by_field": {
+        "clock_position": {
+          "count": 2,
+          "message": "Imputed 2 missing clock_position values using forward-fill"
+        },
+        "length": {
+          "count": 1,
+          "message": "Imputed 1 missing length values using median (4.50 inches)"
+        },
+        "width": {
+          "count": 1,
+          "message": "Imputed 1 missing width values using median (2.50 inches)"
+        }
+      }
+    }
+  },
+  "anomalies": {
+    "count": 5,
+    "by_type": {
+      "external_corrosion": 3,
+      "internal_corrosion": 1,
+      "dent": 1
+    },
+    "depth_statistics": {
+      "min": 25.0,
+      "max": 85.0,
+      "mean": 49.0,
+      "median": 45.0,
+      "std": 23.021728866442675,
+      "critical_count": 1,
+      "high_count": 1,
+      "moderate_count": 2,
+      "low_count": 1
+    },
+    "dimension_statistics": {
+      "length": {
+        "min": 3.8,
+        "max": 6.1,
+        "mean": 4.720000000000001,
+        "median": 4.5,
+        "std": 0.9418067742376882
+      },
+      "width": {
+        "min": 2.1,
+        "max": 3.0,
+        "mean": 2.54,
+        "median": 2.5,
+        "std": 0.3646916505762094
+      }
+    },
+    "distance_coverage": {
+      "min": 100.0,
+      "max": 500.0,
+      "range": 400.0
+    }
+  },
+  "reference_points": {
+    "count": 5,
+    "by_type": {
+      "girth_weld": 3,
+      "valve": 1,
+      "tee": 1
+    },
+    "spacing": {
+      "min": 100.0,
+      "max": 100.0,
+      "mean": 100.0,
+      "median": 100.0,
+      "std": 0.0
+    }
+  },
+  "recommendations": [
+    "\u2139\ufe0f  INFO: 3 imputation actions were performed. Review imputation log to understand data transformations.",
+    "\u26a0\ufe0f  WARNING: Only 5 reference points found. Alignment quality may be affected. Minimum 10 reference points recommended.",
+    "\ud83d\udea8 ALERT: 1 anomalies have depth > 80% (critical threshold). Immediate action may be required per 49 CFR 192.933.",
+    "\u2705 EXCELLENT: Data quality score is 100.0/100. Data is ready for alignment and matching."
+  ]
+}
