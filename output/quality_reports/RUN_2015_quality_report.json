@@ -1,0 +1,258 @@
+{
+  "metadata": {
+    "run_id": "RUN_2015",
+    "file_path": "C:\\Users\\carlu\\tidalHack\\data\\ILIDataV2_2015.csv",
+    "generated_at": "2026-02-07T17:10:20.935379",
+    "report_version": "1.0"
+  },
+  "summary": {
+    "total_records": 3406,
+    "anomaly_count": 1768,
+    "reference_point_count": 1638,
+    "validation_status": "PASSED",
+    "data_quality_score": 100.0
+  },
+  "validation": {
+    "passed": true,
+    "total_records": 1768,
+    "valid_records": 1768,
+    "invalid_records": 0,
+    "errors": [],
+    "warnings": [],
+    "required_fields_present": true,
+    "missing_fields": [],
+    "range_validation_errors": []
+  },
+  "data_quality": {
+    "completeness": {
+      "j. no.": 100.0,
+      "j. len [ft]": 0.0,
+      "wt [in]": 100.0,
+      "distance_to_upstream_weld": 100.0,
+      "distance_to_downstream_weld": 100.0,
+      "distance": 100.0,
+      "feature_type": 100.0,
+      "id/od": 98.81,
+      "depth_pct": 100.0,
+      "depth [in]": 100.0,
+      "od reduction [%]": 0.0,
+      "od reduction [in]": 0.0,
+      "length": 100.0,
+      "width": 100.0,
+      "clock_position": 100.0,
+      "description": 21.66,
+      "anomalies per joint": 0.0,
+      "tool velocity [ft/s]": 100.0,
+      "elevation [ft]": 100.0,
+      "seam position (tfi)": 0.0,
+      "tool   (tfi)": 93.1,
+      "seam anomaly  (tfi)": 0.0,
+      "mop [psi]": 100.0,
+      "smys [psi]": 100.0,
+      "seam type": 0.0,
+      "pdesign [psi]": 100.0,
+      "b31g psafe [psi]": 64.31,
+      "b31g pburst [psi]": 64.31,
+      "mod b31g psafe [psi]": 28.34,
+      "mod b31g pburst [psi]": 28.34,
+      "effective area psafe [psi]": 28.34,
+      "effective area pburst [psi]": 28.34,
+      "erf": 28.34,
+      "rpr": 28.34,
+      "run_id": 100.0,
+      "inspection_date": 100.0,
+      "id": 100.0
+    },
+    "validity": {
+      "percentage": 100.0,
+      "valid_count": 1768,
+      "invalid_count": 0
+    },
+    "consistency": {
+      "clock_position_valid_pct": 100.0,
+      "depth_pct_valid_pct": 100.0
+    },
+    "anomaly_metrics": {
+      "missing_j. len [ft]_pct": 100.0,
+      "missing_id/od_pct": 1.19,
+      "missing_od reduction [%]_pct": 100.0,
+      "missing_od reduction [in]_pct": 100.0,
+      "missing_description_pct": 78.34,
+      "missing_anomalies per joint_pct": 100.0,
+      "missing_seam position (tfi)_pct": 100.0,
+      "missing_tool   (tfi)_pct": 6.9,
+      "missing_seam anomaly  (tfi)_pct": 100.0,
+      "missing_seam type_pct": 100.0,
+      "missing_b31g psafe [psi]_pct": 35.69,
+      "missing_b31g pburst [psi]_pct": 35.69,
+      "missing_mod b31g psafe [psi]_pct": 71.66,
+      "missing_mod b31g pburst [psi]_pct": 71.66,
+      "missing_effective area psafe [psi]_pct": 71.66,
+      "missing_effective area pburst [psi]_pct": 71.66,
+      "missing_erf_pct": 71.66,
+      "missing_rpr_pct": 71.66,
+      "distance_min": 9452.13,
+      "distance_max": 56974.24,
+      "distance_mean": 36990.647567873304,
+      "distance_std": 11128.265841502263,
+      "clock_position_min": 1.05,
+      "clock_position_max": 12.0,
+      "clock_position_mean": 6.249934012066365,
+      "clock_position_std": 2.5596205553421845,
+      "depth_pct_min": 10.0,
+      "depth_pct_max": 85.0,
+      "depth_pct_mean": 18.269796380090497,
+      "depth_pct_std": 10.243727831732144,
+      "length_min": 0.32,
+      "length_max": 5.38,
+      "length_mean": 1.026623303167421,
+      "length_std": 0.5506529237182856,
+      "width_min": 0.59,
+      "width_max": 18.14,
+      "width_mean": 1.7900622171945701,
+      "width_std": 1.4185726370653384,
+      "feature_type_distribution": {
+        "external_corrosion": 1646,
+        "other": 122
+      }
+    },
+    "missing_values": {
+      "j. len [ft]": {
+        "count": 1768,
+        "percentage": 100.0
+      },
+      "id/od": {
+        "count": 21,
+        "percentage": 1.19
+      },
+      "od reduction [%]": {
+        "count": 1768,
+        "percentage": 100.0
+      },
+      "od reduction [in]": {
+        "count": 1768,
+        "percentage": 100.0
+      },
+      "description": {
+        "count": 1385,
+        "percentage": 78.34
+      },
+      "anomalies per joint": {
+        "count": 1768,
+        "percentage": 100.0
+      },
+      "seam position (tfi)": {
+        "count": 1768,
+        "percentage": 100.0
+      },
+      "tool   (tfi)": {
+        "count": 122,
+        "percentage": 6.9
+      },
+      "seam anomaly  (tfi)": {
+        "count": 1768,
+        "percentage": 100.0
+      },
+      "seam type": {
+        "count": 1768,
+        "percentage": 100.0
+      },
+      "b31g psafe [psi]": {
+        "count": 631,
+        "percentage": 35.69
+      },
+      "b31g pburst [psi]": {
+        "count": 631,
+        "percentage": 35.69
+      },
+      "mod b31g psafe [psi]": {
+        "count": 1267,
+        "percentage": 71.66
+      },
+      "mod b31g pburst [psi]": {
+        "count": 1267,
+        "percentage": 71.66
+      },
+      "effective area psafe [psi]": {
+        "count": 1267,
+        "percentage": 71.66
+      },
+      "effective area pburst [psi]": {
+        "count": 1267,
+        "percentage": 71.66
+      },
+      "erf": {
+        "count": 1267,
+        "percentage": 71.66
+      },
+      "rpr": {
+        "count": 1267,
+        "percentage": 71.66
+      }
+    }
+  },
+  "imputation": {
+    "actions_performed": 0,
+    "log": [],
+    "summary": {
+      "total_actions": 0,
+      "by_field": {}
+    }
+  },
+  "anomalies": {
+    "count": 1768,
+    "by_type": {
+      "external_corrosion": 1646,
+      "other": 122
+    },
+    "depth_statistics": {
+      "min": 10.0,
+      "max": 85.0,
+      "mean": 18.269796380090497,
+      "median": 14.0,
+      "std": 10.243727831732144,
+      "critical_count": 2,
+      "high_count": 34,
+      "moderate_count": 175,
+      "low_count": 1557
+    },
+    "dimension_statistics": {
+      "length": {
+        "min": 0.32,
+        "max": 5.38,
+        "mean": 1.026623303167421,
+        "median": 0.83,
+        "std": 0.5506529237182856
+      },
+      "width": {
+        "min": 0.59,
+        "max": 18.14,
+        "mean": 1.7900622171945701,
+        "median": 1.38,
+        "std": 1.4185726370653384
+      }
+    },
+    "distance_coverage": {
+      "min": 9452.13,
+      "max": 56974.24,
+      "range": 47522.11
+    }
+  },
+  "reference_points": {
+    "count": 1638,
+    "by_type": {
+      "other": 1638
+    },
+    "spacing": {
+      "min": 0.040000000000873115,
+      "max": 40.720000000001164,
+      "mean": 35.03640806353085,
+      "median": 40.029999999998836,
+      "std": 10.333471331316645
+    }
+  },
+  "recommendations": [
+    "\ud83d\udea8 ALERT: 2 anomalies have depth > 80% (critical threshold). Immediate action may be required per 49 CFR 192.933.",
+    "\u2705 EXCELLENT: Data quality score is 100.0/100. Data is ready for alignment and matching."
+  ]
+}

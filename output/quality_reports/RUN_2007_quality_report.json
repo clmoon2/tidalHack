@@ -1,0 +1,178 @@
+{
+  "metadata": {
+    "run_id": "RUN_2007",
+    "file_path": "C:\\Users\\carlu\\tidalHack\\data\\ILIDataV2_2007.csv",
+    "generated_at": "2026-02-07T17:10:20.810472",
+    "report_version": "1.0"
+  },
+  "summary": {
+    "total_records": 2347,
+    "anomaly_count": 711,
+    "reference_point_count": 1636,
+    "validation_status": "PASSED",
+    "data_quality_score": 100.0
+  },
+  "validation": {
+    "passed": true,
+    "total_records": 711,
+    "valid_records": 711,
+    "invalid_records": 0,
+    "errors": [],
+    "warnings": [],
+    "required_fields_present": true,
+    "missing_fields": [],
+    "range_validation_errors": []
+  },
+  "data_quality": {
+    "completeness": {
+      "j. no.": 0.0,
+      "j. len [ft]": 0.0,
+      "t [in]": 100.0,
+      "distance_to_upstream_weld": 100.0,
+      "distance": 100.0,
+      "height [ft]": 100.0,
+      "feature_type": 100.0,
+      "depth_pct": 100.0,
+      "id reduction [%]": 0.0,
+      "length": 100.0,
+      "width": 100.0,
+      "p2 burst / mop": 19.41,
+      "clock_position": 100.0,
+      "internal": 87.62,
+      "description": 0.0,
+      "run_id": 100.0,
+      "inspection_date": 100.0,
+      "id": 100.0
+    },
+    "validity": {
+      "percentage": 100.0,
+      "valid_count": 711,
+      "invalid_count": 0
+    },
+    "consistency": {
+      "clock_position_valid_pct": 100.0,
+      "depth_pct_valid_pct": 100.0
+    },
+    "anomaly_metrics": {
+      "missing_j. no._pct": 100.0,
+      "missing_j. len [ft]_pct": 100.0,
+      "missing_id reduction [%]_pct": 100.0,
+      "missing_p2 burst / mop_pct": 80.59,
+      "missing_internal_pct": 12.38,
+      "missing_description_pct": 100.0,
+      "distance_min": 125.12,
+      "distance_max": 56387.44,
+      "distance_mean": 21714.085611814346,
+      "distance_std": 17911.8636166901,
+      "clock_position_min": 1.0166666666666666,
+      "clock_position_max": 12.0,
+      "clock_position_mean": 6.375105485232067,
+      "clock_position_std": 2.725171723747325,
+      "depth_pct_min": 10.0,
+      "depth_pct_max": 67.0,
+      "depth_pct_mean": 16.0,
+      "depth_pct_std": 8.02443451563876,
+      "length_min": 0.35,
+      "length_max": 44.24,
+      "length_mean": 3.5007172995780595,
+      "length_std": 4.240987483696376,
+      "width_min": 0.55,
+      "width_max": 42.81,
+      "width_mean": 4.653966244725739,
+      "width_std": 5.36883702558661,
+      "feature_type_distribution": {
+        "other": 387,
+        "external_corrosion": 324
+      }
+    },
+    "missing_values": {
+      "j. no.": {
+        "count": 711,
+        "percentage": 100.0
+      },
+      "j. len [ft]": {
+        "count": 711,
+        "percentage": 100.0
+      },
+      "id reduction [%]": {
+        "count": 711,
+        "percentage": 100.0
+      },
+      "p2 burst / mop": {
+        "count": 573,
+        "percentage": 80.59
+      },
+      "internal": {
+        "count": 88,
+        "percentage": 12.38
+      },
+      "description": {
+        "count": 711,
+        "percentage": 100.0
+      }
+    }
+  },
+  "imputation": {
+    "actions_performed": 0,
+    "log": [],
+    "summary": {
+      "total_actions": 0,
+      "by_field": {}
+    }
+  },
+  "anomalies": {
+    "count": 711,
+    "by_type": {
+      "other": 387,
+      "external_corrosion": 324
+    },
+    "depth_statistics": {
+      "min": 10.0,
+      "max": 67.0,
+      "mean": 16.0,
+      "median": 13.0,
+      "std": 8.02443451563876,
+      "critical_count": 0,
+      "high_count": 5,
+      "moderate_count": 47,
+      "low_count": 659
+    },
+    "dimension_statistics": {
+      "length": {
+        "min": 0.35,
+        "max": 44.24,
+        "mean": 3.5007172995780595,
+        "median": 2.6,
+        "std": 4.240987483696376
+      },
+      "width": {
+        "min": 0.55,
+        "max": 42.81,
+        "mean": 4.653966244725739,
+        "median": 2.54,
+        "std": 5.36883702558661
+      }
+    },
+    "distance_coverage": {
+      "min": 125.12,
+      "max": 56387.44,
+      "range": 56262.32
+    }
+  },
+  "reference_points": {
+    "count": 1636,
+    "by_type": {
+      "other": 1636
+    },
+    "spacing": {
+      "min": 0.31999999999970896,
+      "max": 45.909999999999854,
+      "mean": 35.042483180428135,
+      "median": 39.960000000000036,
+      "std": 10.204998077006499
+    }
+  },
+  "recommendations": [
+    "\u2705 EXCELLENT: Data quality score is 100.0/100. Data is ready for alignment and matching."
+  ]
+}

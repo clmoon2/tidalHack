@@ -27,6 +27,13 @@ def generate_quality_report_for_file(file_path: str, run_id: str, inspection_dat
     print(f"Run ID: {run_id}")
     print(f"{'='*80}\n")
     
+    # Check if file exists
+    file_path_obj = Path(file_path)
+    if not file_path_obj.exists():
+        print(f"⚠ File not found: {file_path}")
+        print("Skipping this file...")
+        return
+    
     # Step 1: Load and process data
     print("Step 1: Loading and processing data...")
     loader = ILIDataLoader()
@@ -133,11 +140,15 @@ def main():
     print("ILI DATA QUALITY REPORTING EXAMPLE")
     print("="*80)
     
+    # Get the project root directory (parent of examples/)
+    project_root = Path(__file__).parent.parent
+    data_dir = project_root / "data"
+    
     # Example files to process
     files = [
-        ("data/ILIDataV2_2007.csv", "RUN_2007", datetime(2007, 1, 1)),
-        ("data/ILIDataV2_2015.csv", "RUN_2015", datetime(2015, 1, 1)),
-        ("data/ILIDataV2_2022.csv", "RUN_2022", datetime(2022, 1, 1)),
+        (str(data_dir / "ILIDataV2_2007.csv"), "RUN_2007", datetime(2007, 1, 1)),
+        (str(data_dir / "ILIDataV2_2015.csv"), "RUN_2015", datetime(2015, 1, 1)),
+        (str(data_dir / "ILIDataV2_2022.csv"), "RUN_2022", datetime(2022, 1, 1)),
     ]
     
     reports = []

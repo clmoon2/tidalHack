@@ -1,0 +1,214 @@
+{
+  "metadata": {
+    "run_id": "RUN_2022",
+    "file_path": "C:\\Users\\carlu\\tidalHack\\data\\ILIDataV2_2022.csv",
+    "generated_at": "2026-02-07T17:10:21.124870",
+    "report_version": "1.0"
+  },
+  "summary": {
+    "total_records": 4610,
+    "anomaly_count": 2636,
+    "reference_point_count": 1974,
+    "validation_status": "PASSED",
+    "data_quality_score": 100.0
+  },
+  "validation": {
+    "passed": true,
+    "total_records": 2636,
+    "valid_records": 2636,
+    "invalid_records": 0,
+    "errors": [],
+    "warnings": [],
+    "required_fields_present": true,
+    "missing_fields": [],
+    "range_validation_errors": []
+  },
+  "data_quality": {
+    "completeness": {
+      "joint number": 100.0,
+      "joint length [ft]": 100.0,
+      "wt [in]": 100.0,
+      "distance to u/s gw \n[ft]": 100.0,
+      "distance to d/s gw \n[ft]": 100.0,
+      "distance": 100.0,
+      "feature_type": 100.0,
+      "id/od": 100.0,
+      "depth_pct": 100.0,
+      "metal loss depth \n[in]": 100.0,
+      "metal loss depth + tolerance\n[%]": 97.15,
+      "dimension classification": 100.0,
+      "metal loss depth tolerance [%] \n(includes seamless and haz and modified specs)": 97.12,
+      "dent depth\n [%]": 0.0,
+      "dent depth\n [in]": 0.0,
+      "is any part of the dent affecting the top of the pipe? \n[y/n]": 0.0,
+      "length": 100.0,
+      "width": 100.0,
+      "clock_position": 100.0,
+      "description": 100.0,
+      "anomalies per joint": 100.0,
+      "was anomaly sizing reviewed by analyst? \n[y/n]": 100.0,
+      "was anomaly sizing/dimensions manually changed? \n[y/n]": 100.0,
+      "magnetization level \n[ka/m] for mfl survey \nor \nactual wt [in] for ut survey": 100.0,
+      "elevation [ft]": 100.0,
+      "seam position\n[hh:mm]": 100.0,
+      "distance to seam weld \n[in]": 95.37,
+      "tool": 100.0,
+      "evaluation pressure [psi]": 100.0,
+      "smys [psi]": 100.0,
+      "pipe type": 100.0,
+      "pipe diameter (o.d.) \n[in.]": 100.0,
+      "pdesign [psi]": 100.0,
+      "mod b31g psafe \n[psi]": 100.0,
+      "mod b31g pburst [psi]": 100.0,
+      "mod b31g psafe pressure with tolerance\n[psi]": 100.0,
+      "mod b31g pburst pressure with tolerance\n[psi]": 100.0,
+      "effective area psafe [psi]": 100.0,
+      "effective area pburst [psi]": 100.0,
+      "erf": 100.0,
+      "rpr": 100.0,
+      "length tolerance [in]": 97.15,
+      "width tolerance [in]": 97.15,
+      "run_id": 100.0,
+      "inspection_date": 100.0,
+      "id": 100.0
+    },
+    "validity": {
+      "percentage": 100.0,
+      "valid_count": 2636,
+      "invalid_count": 0
+    },
+    "consistency": {
+      "clock_position_valid_pct": 100.0,
+      "depth_pct_valid_pct": 100.0
+    },
+    "anomaly_metrics": {
+      "missing_metal loss depth + tolerance\n[%]_pct": 2.85,
+      "missing_metal loss depth tolerance [%] \n(includes seamless and haz and modified specs)_pct": 2.88,
+      "missing_dent depth\n [%]_pct": 100.0,
+      "missing_dent depth\n [in]_pct": 100.0,
+      "missing_is any part of the dent affecting the top of the pipe? \n[y/n]_pct": 100.0,
+      "missing_distance to seam weld \n[in]_pct": 4.63,
+      "missing_length tolerance [in]_pct": 2.85,
+      "missing_width tolerance [in]_pct": 2.85,
+      "distance_min": 125.902,
+      "distance_max": 57402.346,
+      "distance_mean": 33167.830900986344,
+      "distance_std": 16711.09599343347,
+      "clock_position_min": 1.0,
+      "clock_position_max": 12.0,
+      "clock_position_mean": 6.385843449671219,
+      "clock_position_std": 2.765727899247203,
+      "depth_pct_min": 10.0,
+      "depth_pct_max": 79.0,
+      "depth_pct_mean": 19.705614567526556,
+      "depth_pct_std": 8.707421356577786,
+      "length_min": 0.2,
+      "length_max": 97.1,
+      "length_mean": 5.694119878603946,
+      "length_std": 6.635163039515739,
+      "width_min": 0.2,
+      "width_max": 28.1,
+      "width_mean": 3.040174506828528,
+      "width_std": 2.51329183957297,
+      "feature_type_distribution": {
+        "external_corrosion": 2636
+      }
+    },
+    "missing_values": {
+      "metal loss depth + tolerance\n[%]": {
+        "count": 75,
+        "percentage": 2.85
+      },
+      "metal loss depth tolerance [%] \n(includes seamless and haz and modified specs)": {
+        "count": 76,
+        "percentage": 2.88
+      },
+      "dent depth\n [%]": {
+        "count": 2636,
+        "percentage": 100.0
+      },
+      "dent depth\n [in]": {
+        "count": 2636,
+        "percentage": 100.0
+      },
+      "is any part of the dent affecting the top of the pipe? \n[y/n]": {
+        "count": 2636,
+        "percentage": 100.0
+      },
+      "distance to seam weld \n[in]": {
+        "count": 122,
+        "percentage": 4.63
+      },
+      "length tolerance [in]": {
+        "count": 75,
+        "percentage": 2.85
+      },
+      "width tolerance [in]": {
+        "count": 75,
+        "percentage": 2.85
+      }
+    }
+  },
+  "imputation": {
+    "actions_performed": 0,
+    "log": [],
+    "summary": {
+      "total_actions": 0,
+      "by_field": {}
+    }
+  },
+  "anomalies": {
+    "count": 2636,
+    "by_type": {
+      "external_corrosion": 2636
+    },
+    "depth_statistics": {
+      "min": 10.0,
+      "max": 79.0,
+      "mean": 19.705614567526556,
+      "median": 17.0,
+      "std": 8.707421356577786,
+      "critical_count": 0,
+      "high_count": 36,
+      "moderate_count": 267,
+      "low_count": 2333
+    },
+    "dimension_statistics": {
+      "length": {
+        "min": 0.2,
+        "max": 97.1,
+        "mean": 5.694119878603946,
+        "median": 3.6,
+        "std": 6.635163039515739
+      },
+      "width": {
+        "min": 0.2,
+        "max": 28.1,
+        "mean": 3.040174506828528,
+        "median": 2.3,
+        "std": 2.51329183957297
+      }
+    },
+    "distance_coverage": {
+      "min": 125.902,
+      "max": 57402.346,
+      "range": 57276.443999999996
+    }
+  },
+  "reference_points": {
+    "count": 1974,
+    "by_type": {
+      "other": 1974
+    },
+    "spacing": {
+      "min": 0.08799999999610009,
+      "max": 41.09300000000076,
+      "mean": 29.11666396350735,
+      "median": 39.99300000000039,
+      "std": 14.653102815368236
+    }
+  },
+  "recommendations": [
+    "\u2705 EXCELLENT: Data quality score is 100.0/100. Data is ready for alignment and matching."
+  ]
+}
