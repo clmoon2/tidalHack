@@ -10,6 +10,9 @@ from src.data_models.models import (
     Prediction,
     AlignmentResult,
     ValidationResult,
+    AnomalyChain,
+    ChainExplanation,
+    ThreeWayAnalysisResult,
 )
 
 __all__ = [
@@ -20,4 +23,7 @@ __all__ = [
     "Prediction",
     "AlignmentResult",
     "ValidationResult",
+    "AnomalyChain",
+    "ChainExplanation",
+    "ThreeWayAnalysisResult",
 ]

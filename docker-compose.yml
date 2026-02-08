@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  ili-alignment:
+    build: .
+    container_name: ili-alignment-dashboard
+    ports:
+      - "8501:8501"
+    environment:
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+    volumes:
+      # Mount data directory for persistence
+      - ./data:/app/data
+      - ./output:/app/output
+      - ./models:/app/models
+      # Mount database for persistence
+      - ./ili_system.db:/app/ili_system.db
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

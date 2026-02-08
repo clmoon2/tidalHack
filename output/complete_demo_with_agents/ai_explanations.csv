@@ -1,0 +1,22 @@
+match_id,confidence,explanation,recommendation,concerns
+RUN_2020_0 -> RUN_2022_0,HIGH,"**Explanation of Anomaly Match**
+
+Overall Match Quality: **Strong**
+
+This match between RUN_2020_0 and RUN_2022_0 is a strong match, indicating that these are likely the same anomaly observed in two different inspection runs. The high overall similarity score of 0.984 is supported by near-identical distance and clock position, as well as matching anomaly types (external corrosion). The AlignmentAgent confirms good alignment quality based on the small distance difference and identical clock positions.
+
+The observed changes in depth, length, and width are consistent with the expected progression of external corrosion over the two-year period between inspections. Specifically, the +10% increase in depth and minor increases in length and width are reasonable. The ValidatorAgent affirms a high confidence level, based on the consistency of all features and the plausibility of the changes. No significant conflicting evidence was identified.",Accept this match with high confidence. The anomalies show strong correlation across all metrics.,Significant depth growth observed (+10.0%)
+RUN_2020_1 -> RUN_2022_1,HIGH,"**Explanation of Anomaly Match**
+
+Overall Match Quality: **Strong**
+
+The match between RUN_2020_1 and RUN_2022_1 represents a strong and highly reliable match. The overall similarity score of 0.986 reflects excellent agreement across all measured parameters. The AlignmentAgent confirms good alignment due to the minimal distance difference (1.0 ft) and identical clock positions. This indicates a high degree of confidence in the spatial correspondence between the two anomalies.
+
+The changes observed in depth, length, and width are minimal, with a +2% change in depth and small increases in length (+0.2 inches) and width (+0.1 inches). These slight variations are likely attributable to either very slow corrosion growth over the two-year period or minor variations in measurement accuracy between the two inspection runs. The ValidatorAgent reinforces the high confidence level, noting that the changes are small, reasonable, and lack any conflicting information. This match is highly likely to represent the same anomaly observed in both inspections.",Accept this match with high confidence. The anomalies show strong correlation across all metrics.,Validator identified potential concerns
+RUN_2020_3 -> RUN_2022_2,HIGH,"**Explanation of Anomaly Match**
+
+Overall Match Quality: **Strong**
+
+This anomaly match between RUN_2020_3 and RUN_2022_2 is a strong indication that the same anomaly was observed in both inspection runs. The high overall similarity score of 0.986 is supported by a perfect clock match, identical anomaly types (external corrosion), and only a minimal distance difference of 1.0 ft, as confirmed by the AlignmentAgent. This suggests accurate alignment and minimal positional variation between the two runs.
+
+The changes in depth (+3.0%), length (+0.5 inches), and width (+0.2 inches) are small and consistent with expected corrosion growth over a two-year period. The ValidatorAgent confirms a high level of confidence in the match, based on the high similarity scores and the plausibility of the observed changes. There is no evidence to suggest that these anomalies are distinct or that the match is unreliable.",Accept this match with high confidence. The anomalies show strong correlation across all metrics.,Validator identified potential concerns

@@ -249,6 +249,70 @@ class AnomalyWithRegulatory(AnomalyRecord):
 
 
 # Constants for regulatory thresholds
+# Three-Way Analysis Models
+
+class AnomalyChain(BaseModel):
+    """A chain linking the same anomaly across 3 inspection runs (2007→2015→2022)."""
+
+    chain_id: str = Field(..., description="Unique chain identifier")
+    anomaly_2007_id: str = Field(..., description="Anomaly ID from 2007 run")
+    anomaly_2015_id: str = Field(..., description="Anomaly ID from 2015 run")
+    anomaly_2022_id: str = Field(..., description="Anomaly ID from 2022 run")
+    match_confidence_07_15: float = Field(..., ge=0, le=1, description="Match confidence 2007→2015")
+    match_confidence_15_22: float = Field(..., ge=0, le=1, description="Match confidence 2015→2022")
+    depth_2007: float = Field(..., ge=0, le=100, description="Depth % in 2007")
+    depth_2015: float = Field(..., ge=0, le=100, description="Depth % in 2015")
+    depth_2022: float = Field(..., ge=0, le=100, description="Depth % in 2022")
+    growth_rate_07_15: float = Field(..., description="Growth rate 2007→2015 (pp/year)")
+    growth_rate_15_22: float = Field(..., description="Growth rate 2015→2022 (pp/year)")
+    acceleration: float = Field(..., description="Change in growth rate between intervals")
+    is_accelerating: bool = Field(default=False, description="Whether growth is accelerating")
+    risk_score: float = Field(..., ge=0, le=1, description="Composite risk score")
+    years_to_80pct: Optional[float] = Field(None, description="Projected years to 80% critical depth")
+
+    @field_validator("is_accelerating", mode="before")
+    @classmethod
+    def check_acceleration(cls, v: Any, info: Any) -> bool:
+        data = info.data
+        return data.get("acceleration", 0) > 0.1  # > 0.1 pp/yr² considered accelerating
+
+
+class ChainExplanation(BaseModel):
+    """AI-generated explanation for an anomaly chain."""
+
+    chain_id: str
+    trend_classification: Literal["ACCELERATING", "STABLE", "DECELERATING"]
+    urgency_level: Literal["IMMEDIATE", "NEAR_TERM", "SCHEDULED", "MONITOR"]
+    lifecycle_narrative: str = Field(..., description="Full lifecycle story of the anomaly")
+    trend_analysis: str = Field(..., description="Analysis of growth trend across intervals")
+    projection_analysis: str = Field(..., description="Future state projection")
+    recommendation: str = Field(..., description="Recommended action")
+    concerns: List[str] = Field(default_factory=list)
+
+
+class ThreeWayAnalysisResult(BaseModel):
+    """Complete result of a three-way analysis."""
+
+    analysis_id: str
+    timestamp: datetime
+    total_anomalies_2007: int
+    total_anomalies_2015: int
+    total_anomalies_2022: int
+    matched_07_15: int
+    matched_15_22: int
+    total_chains: int
+    chains: List[AnomalyChain] = Field(default_factory=list)
+    explanations: List[ChainExplanation] = Field(default_factory=list)
+    accelerating_count: int = 0
+    stable_count: int = 0
+    decelerating_count: int = 0
+    immediate_action_count: int = 0
+    avg_growth_rate_07_15: float = 0.0
+    avg_growth_rate_15_22: float = 0.0
+    status: Literal["PENDING", "RUNNING", "COMPLETE", "FAILED"] = "PENDING"
+    error_message: Optional[str] = None
+
+
 class RegulatoryThresholds:
     """Regulatory threshold constants"""
     

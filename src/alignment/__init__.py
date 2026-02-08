@@ -2,5 +2,8 @@
 Reference point alignment engine using Dynamic Time Warping.
 """
 
-# Placeholder for future imports
-__all__ = []
+from .dtw_aligner import DTWAligner
+from .correction import DistanceCorrectionFunction
+from .validator import AlignmentValidator
+
+__all__ = ['DTWAligner', 'DistanceCorrectionFunction', 'AlignmentValidator']

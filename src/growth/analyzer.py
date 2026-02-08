@@ -36,9 +36,12 @@ class GrowthAnalyzer:
         time_interval_years: float
     ) -> float:
         """
-        Calculate growth rate as percentage change per year.
+        Calculate growth rate as absolute change per year.
         
-        Formula: ((final - initial) / initial) * 100 / time_interval_years
+        For depth (percentage), this returns percentage points per year.
+        For dimensions (inches), this returns inches per year.
+        
+        Formula: (final - initial) / time_interval_years
         
         Args:
             initial_value: Initial measurement value
@@ -46,18 +49,13 @@ class GrowthAnalyzer:
             time_interval_years: Time interval in years
         
         Returns:
-            Growth rate as percentage per year
+            Growth rate as absolute change per year
         """
         if time_interval_years <= 0:
             raise ValueError("Time interval must be positive")
         
-        if initial_value <= 0:
-            # Cannot calculate percentage growth from zero/negative
-            return 0.0
-        
-        # Calculate percentage change per year
-        percentage_change = ((final_value - initial_value) / initial_value) * 100
-        growth_rate = percentage_change / time_interval_years
+        # Calculate absolute change per year
+        growth_rate = (final_value - initial_value) / time_interval_years
         
         return growth_rate
     

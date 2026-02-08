@@ -176,12 +176,31 @@ class RiskScorer:
             List of risk score dictionaries
         """
         # Create lookup for growth metrics
+        # Match IDs are in format: "{anom1.id}_{anom2.id}"
+        # Example: "RUN_2015_123_RUN_2022_456"
+        # We need to extract anom2.id (the newer run anomaly)
         growth_lookup = {}
         if growth_metrics_list:
             for gm in growth_metrics_list:
-                # Extract anomaly2_id from match_id (format: "id1_id2")
-                anomaly2_id = gm.match_id.split('_', 1)[1] if '_' in gm.match_id else gm.match_id
-                growth_lookup[anomaly2_id] = gm
+                # The match_id from GrowthMetrics.match_id is actually the Match.id
+                # which is formatted as f"{anom1.id}_{anom2.id}"
+                # We need to find where the second ID starts
+                
+                # Split and look for the second occurrence of "RUN"
+                parts = gm.match_id.split('_')
+                run_indices = [i for i, p in enumerate(parts) if p.startswith('RUN')]
+                
+                if len(run_indices) >= 2:
+                    # Second RUN starts the second anomaly ID
+                    second_run_start = run_indices[1]
+                    anomaly2_id = '_'.join(parts[second_run_start:])
+                    growth_lookup[anomaly2_id] = gm
+                elif len(run_indices) == 1:
+                    # Only one RUN found, might be simple format
+                    # Try splitting in half
+                    mid = len(parts) // 2
+                    anomaly2_id = '_'.join(parts[mid:])
+                    growth_lookup[anomaly2_id] = gm
         
         # Score each anomaly
         scores = []

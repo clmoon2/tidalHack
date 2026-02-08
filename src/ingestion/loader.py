@@ -31,11 +31,14 @@ class ILIDataLoader:
             "to u/s w. [ft]": "distance_to_upstream_weld",
             "to d/s w. [ft]": "distance_to_downstream_weld",
             "depth [%]": "depth_pct",
+            "depth%": "depth_pct",  # Added for sample data
             "length [in]": "length",
             "width [in]": "width",
             "o'clock": "clock_position",
+            "clock": "clock_position",  # Added for sample data
             "event": "feature_type",
             "event description": "feature_type",
+            "type": "feature_type",  # Added for sample data
             "comment": "description",
             "comments": "description",
             # 2022 format variations
