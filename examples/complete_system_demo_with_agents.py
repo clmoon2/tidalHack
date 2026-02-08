@@ -12,16 +12,123 @@ This demonstrates ALL capabilities including the multi-agent system:
 Requires: GOOGLE_API_KEY in .env file
 """
 
+import sys
+import os
+from pathlib import Path
+
+
+def run_three_way_mode():
+    """
+    Run the full three-way analysis mode (2007 -> 2015 -> 2022).
+
+    Uses the ThreeWayAnalyzer to:
+    - Load all 3 datasets
+    - Match anomalies across runs
+    - Build 3-way chains
+    - Compute growth and acceleration
+    - Generate AI-powered lifecycle narratives
+    """
+    sys.path.insert(0, str(Path(__file__).parent.parent))
+
+    from dotenv import load_dotenv
+    load_dotenv()
+
+    print("=" * 80)
+    print("ILI DATA ALIGNMENT SYSTEM - THREE-WAY ANALYSIS WITH AGENTIC AI")
+    print("=" * 80)
+    print("\n15-Year Growth Tracking: 2007 -> 2015 -> 2022")
+    print("6 AI Agents: Alignment, Matching, Validator, Explainer, Trend, Projection\n")
+
+    api_key = os.getenv('GOOGLE_API_KEY')
+    use_agents = bool(api_key)
+
+    if use_agents:
+        print(f"[OK] Google API key found - Agentic AI enabled!")
+    else:
+        print("[!] No GOOGLE_API_KEY - using rule-based explanations")
+
+    from src.analysis.three_way_analyzer import ThreeWayAnalyzer
+
+    data_dir = Path(__file__).parent.parent / "data"
+    output_dir = Path(__file__).parent.parent / "output" / "three_way_with_agents"
+
+    analyzer = ThreeWayAnalyzer(
+        distance_sigma=5.0,
+        clock_sigma=1.0,
+        confidence_threshold=0.6,
+        rapid_growth_threshold=5.0,
+        use_agents=use_agents,
+        api_key=api_key,
+    )
+
+    result = analyzer.run_full_analysis(
+        data_2007_path=str(data_dir / "ILIDataV2_2007.csv"),
+        data_2015_path=str(data_dir / "ILIDataV2_2015.csv"),
+        data_2022_path=str(data_dir / "ILIDataV2_2022.csv"),
+        top_n_explain=10,
+        output_dir=str(output_dir),
+    )
+
+    # Print executive summary
+    print("\n" + "=" * 80)
+    print("EXECUTIVE SUMMARY")
+    print("=" * 80)
+
+    print(f"\n  Analysis ID: {result.analysis_id}")
+    print(f"  Status: {result.status}")
+    print(f"\n  Datasets:")
+    print(f"    2007: {result.total_anomalies_2007:,} anomalies")
+    print(f"    2015: {result.total_anomalies_2015:,} anomalies")
+    print(f"    2022: {result.total_anomalies_2022:,} anomalies")
+
+    print(f"\n  Matching:")
+    print(f"    2007->2015: {result.matched_07_15:,} pairs")
+    print(f"    2015->2022: {result.matched_15_22:,} pairs")
+    print(f"    3-way chains: {result.total_chains:,}")
+
+    print(f"\n  Trends:")
+    print(f"    Accelerating: {result.accelerating_count:,}")
+    print(f"    Stable: {result.stable_count:,}")
+    print(f"    Decelerating: {result.decelerating_count:,}")
+
+    print(f"\n  Risk:")
+    print(f"    Immediate action: {result.immediate_action_count:,}")
+    print(f"    Avg growth 07-15: {result.avg_growth_rate_07_15:.3f} pp/yr")
+    print(f"    Avg growth 15-22: {result.avg_growth_rate_15_22:.3f} pp/yr")
+
+    # Print top 5 chains
+    if result.chains:
+        print("\n  Top 5 Risk Chains:")
+        for i, chain in enumerate(result.chains[:5], 1):
+            accel_mark = "^" if chain.is_accelerating else "-" if chain.acceleration < -0.1 else "="
+            print(
+                f"    {i}. {chain.chain_id} | "
+                f"Risk: {chain.risk_score:.3f} | "
+                f"Depth: {chain.depth_2007:.0f}% -> {chain.depth_2015:.0f}% -> {chain.depth_2022:.0f}% | "
+                f"Trend: {accel_mark}"
+            )
+
+    # Print top explanations
+    if result.explanations:
+        print(f"\n  AI Explanations ({len(result.explanations)} generated):")
+        for exp in result.explanations[:3]:
+            print(f"\n    Chain: {exp.chain_id}")
+            print(f"    Trend: {exp.trend_classification} | Urgency: {exp.urgency_level}")
+            # Truncate narrative for display
+            narrative_short = exp.lifecycle_narrative[:200].replace('\n', ' ')
+            print(f"    Narrative: {narrative_short}...")
+            print(f"    Recommendation: {exp.recommendation[:100]}...")
+
+    print(f"\n  Output files: {output_dir}")
+    print("\n" + "=" * 80 + "\n")
+
+
 if __name__ == "__main__":
-    import sys
-    import os
-    from pathlib import Path
-    
     # Check for --three-way flag
     if "--three-way" in sys.argv:
         run_three_way_mode()
         sys.exit(0)
-    
+
     # Add src to path
     sys.path.insert(0, str(Path(__file__).parent.parent))
     
@@ -327,114 +434,4 @@ if __name__ == "__main__":
     print("  3. Run dashboard: streamlit run src/dashboard/app.py")
     print("  4. Run three-way mode: python examples/complete_system_demo_with_agents.py --three-way")
     
-    print("\n" + "=" * 80 + "\n")
-
-
-def run_three_way_mode():
-    """
-    Run the full three-way analysis mode (2007 -> 2015 -> 2022).
-    
-    Uses the ThreeWayAnalyzer to:
-    - Load all 3 datasets
-    - Match anomalies across runs
-    - Build 3-way chains
-    - Compute growth and acceleration
-    - Generate AI-powered lifecycle narratives
-    """
-    import sys
-    import os
-    from pathlib import Path
-    
-    sys.path.insert(0, str(Path(__file__).parent.parent))
-    
-    from dotenv import load_dotenv
-    load_dotenv()
-    
-    print("=" * 80)
-    print("ILI DATA ALIGNMENT SYSTEM - THREE-WAY ANALYSIS WITH AGENTIC AI")
-    print("=" * 80)
-    print("\n15-Year Growth Tracking: 2007 -> 2015 -> 2022")
-    print("6 AI Agents: Alignment, Matching, Validator, Explainer, Trend, Projection\n")
-    
-    api_key = os.getenv('GOOGLE_API_KEY')
-    use_agents = bool(api_key)
-    
-    if use_agents:
-        print(f"[OK] Google API key found - Agentic AI enabled!")
-    else:
-        print("[!] No GOOGLE_API_KEY - using rule-based explanations")
-    
-    from src.analysis.three_way_analyzer import ThreeWayAnalyzer
-    
-    data_dir = Path(__file__).parent.parent / "data"
-    output_dir = Path(__file__).parent.parent / "output" / "three_way_with_agents"
-    
-    analyzer = ThreeWayAnalyzer(
-        distance_sigma=5.0,
-        clock_sigma=1.0,
-        confidence_threshold=0.6,
-        rapid_growth_threshold=5.0,
-        use_agents=use_agents,
-        api_key=api_key,
-    )
-    
-    result = analyzer.run_full_analysis(
-        data_2007_path=str(data_dir / "ILIDataV2_2007.csv"),
-        data_2015_path=str(data_dir / "ILIDataV2_2015.csv"),
-        data_2022_path=str(data_dir / "ILIDataV2_2022.csv"),
-        top_n_explain=10,
-        output_dir=str(output_dir),
-    )
-    
-    # Print executive summary
-    print("\n" + "=" * 80)
-    print("EXECUTIVE SUMMARY")
-    print("=" * 80)
-    
-    print(f"\n  Analysis ID: {result.analysis_id}")
-    print(f"  Status: {result.status}")
-    print(f"\n  Datasets:")
-    print(f"    2007: {result.total_anomalies_2007:,} anomalies")
-    print(f"    2015: {result.total_anomalies_2015:,} anomalies")
-    print(f"    2022: {result.total_anomalies_2022:,} anomalies")
-    
-    print(f"\n  Matching:")
-    print(f"    2007->2015: {result.matched_07_15:,} pairs")
-    print(f"    2015->2022: {result.matched_15_22:,} pairs")
-    print(f"    3-way chains: {result.total_chains:,}")
-    
-    print(f"\n  Trends:")
-    print(f"    Accelerating: {result.accelerating_count:,}")
-    print(f"    Stable: {result.stable_count:,}")
-    print(f"    Decelerating: {result.decelerating_count:,}")
-    
-    print(f"\n  Risk:")
-    print(f"    Immediate action: {result.immediate_action_count:,}")
-    print(f"    Avg growth 07-15: {result.avg_growth_rate_07_15:.3f} pp/yr")
-    print(f"    Avg growth 15-22: {result.avg_growth_rate_15_22:.3f} pp/yr")
-    
-    # Print top 5 chains
-    if result.chains:
-        print("\n  Top 5 Risk Chains:")
-        for i, chain in enumerate(result.chains[:5], 1):
-            accel_mark = "^" if chain.is_accelerating else "-" if chain.acceleration < -0.1 else "="
-            print(
-                f"    {i}. {chain.chain_id} | "
-                f"Risk: {chain.risk_score:.3f} | "
-                f"Depth: {chain.depth_2007:.0f}% -> {chain.depth_2015:.0f}% -> {chain.depth_2022:.0f}% | "
-                f"Trend: {accel_mark}"
-            )
-    
-    # Print top explanations
-    if result.explanations:
-        print(f"\n  AI Explanations ({len(result.explanations)} generated):")
-        for exp in result.explanations[:3]:
-            print(f"\n    Chain: {exp.chain_id}")
-            print(f"    Trend: {exp.trend_classification} | Urgency: {exp.urgency_level}")
-            # Truncate narrative for display
-            narrative_short = exp.lifecycle_narrative[:200].replace('\n', ' ')
-            print(f"    Narrative: {narrative_short}...")
-            print(f"    Recommendation: {exp.recommendation[:100]}...")
-    
-    print(f"\n  Output files: {output_dir}")
     print("\n" + "=" * 80 + "\n")
