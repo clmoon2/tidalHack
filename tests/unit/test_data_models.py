@@ -108,7 +108,7 @@ class TestMatch:
             id="M1",
             anomaly1_id="A1",
             anomaly2_id="A2",
-            similarity_score=0.85,
+            similarity_score=0.85,  # >= 0.8 threshold
             distance_similarity=0.9,
             clock_similarity=0.8,
             type_similarity=1.0,
@@ -140,7 +140,7 @@ class TestMatch:
             id="M1",
             anomaly1_id="A1",
             anomaly2_id="A2",
-            similarity_score=0.5,
+            similarity_score=0.5,  # < 0.6 threshold
             distance_similarity=0.6,
             clock_similarity=0.5,
             type_similarity=0.0,

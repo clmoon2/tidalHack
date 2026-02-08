@@ -13,6 +13,7 @@ from src.data_models.models import (
     AnomalyChain,
     ChainExplanation,
     ThreeWayAnalysisResult,
+    InteractionZone,
 )
 
 __all__ = [
@@ -26,4 +27,5 @@ __all__ = [
     "AnomalyChain",
     "ChainExplanation",
     "ThreeWayAnalysisResult",
+    "InteractionZone",
 ]

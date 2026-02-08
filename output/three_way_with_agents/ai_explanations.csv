@@ -1,0 +1,51 @@
+chain_id,trend,urgency,narrative,recommendation,concerns
+CHAIN_0203,ACCELERATING,NEAR_TERM,"This anomaly was first detected in 2007 at 28.0% depth. By 2015, it had grown to 16.0% (growth rate: -1.50 pp/yr over 8 years). By 2022, it reached 36.0% (growth rate: 2.86 pp/yr over 7 years). 
+
+Trend Analysis: Growth rate changed from -1.50 pp/yr (2007-2015) to 2.86 pp/yr (2015-2022). Acceleration: +4.357 pp/yr². Trend: rapidly accelerating (ACCELERATING).
+
+Projection: At current growth rate (2.86 pp/yr), this anomaly will reach the 80% critical threshold in approximately 3.2 years.",Schedule repair within the next inspection cycle (3-7 years). Increase monitoring frequency for this location.,Growth is accelerating (+4.357 pp/yr²); Low match confidence (0.609) - verify chain linkage
+CHAIN_0107,ACCELERATING,NEAR_TERM,"This anomaly was first detected in 2007 at 15.0% depth. By 2015, it had grown to 23.0% (growth rate: 1.00 pp/yr over 8 years). By 2022, it reached 47.0% (growth rate: 3.43 pp/yr over 7 years). 
+
+Trend Analysis: Growth rate changed from 1.00 pp/yr (2007-2015) to 3.43 pp/yr (2015-2022). Acceleration: +2.429 pp/yr². Trend: rapidly accelerating (ACCELERATING).
+
+Projection: At current growth rate (3.43 pp/yr), this anomaly will reach the 80% critical threshold in approximately 3.5 years.",Schedule repair within the next inspection cycle (3-7 years). Increase monitoring frequency for this location.,Growth is accelerating (+2.429 pp/yr²); Low match confidence (0.615) - verify chain linkage
+CHAIN_0191,ACCELERATING,NEAR_TERM,"This anomaly was first detected in 2007 at 42.0% depth. By 2015, it had grown to 44.0% (growth rate: 0.25 pp/yr over 8 years). By 2022, it reached 57.0% (growth rate: 1.86 pp/yr over 7 years). 
+
+Trend Analysis: Growth rate changed from 0.25 pp/yr (2007-2015) to 1.86 pp/yr (2015-2022). Acceleration: +1.607 pp/yr². Trend: rapidly accelerating (ACCELERATING).
+
+Projection: At current growth rate (1.86 pp/yr), this anomaly will reach the 80% critical threshold in approximately 3.9 years.",Schedule repair within the next inspection cycle (3-7 years). Increase monitoring frequency for this location.,Growth is accelerating (+1.607 pp/yr²); Low match confidence (0.640) - verify chain linkage
+CHAIN_0108,ACCELERATING,NEAR_TERM,"This anomaly was first detected in 2007 at 31.0% depth. By 2015, it had grown to 40.0% (growth rate: 1.12 pp/yr over 8 years). By 2022, it reached 56.0% (growth rate: 2.29 pp/yr over 7 years). 
+
+Trend Analysis: Growth rate changed from 1.12 pp/yr (2007-2015) to 2.29 pp/yr (2015-2022). Acceleration: +1.161 pp/yr². Trend: rapidly accelerating (ACCELERATING).
+
+Projection: At current growth rate (2.29 pp/yr), this anomaly will reach the 80% critical threshold in approximately 4.6 years.",Schedule repair within the next inspection cycle (3-7 years). Increase monitoring frequency for this location.,Growth is accelerating (+1.161 pp/yr²); Low match confidence (0.634) - verify chain linkage
+CHAIN_0284,ACCELERATING,NEAR_TERM,"This anomaly was first detected in 2007 at 16.0% depth. By 2015, it had grown to 11.0% (growth rate: -0.62 pp/yr over 8 years). By 2022, it reached 32.0% (growth rate: 3.00 pp/yr over 7 years). 
+
+Trend Analysis: Growth rate changed from -0.62 pp/yr (2007-2015) to 3.00 pp/yr (2015-2022). Acceleration: +3.625 pp/yr². Trend: rapidly accelerating (ACCELERATING).
+
+Projection: At current growth rate (3.00 pp/yr), this anomaly will reach the 80% critical threshold in approximately 4.0 years.",Schedule repair within the next inspection cycle (3-7 years). Increase monitoring frequency for this location.,Growth is accelerating (+3.625 pp/yr²); Low match confidence (0.629) - verify chain linkage
+CHAIN_0290,ACCELERATING,NEAR_TERM,"This anomaly was first detected in 2007 at 11.0% depth. By 2015, it had grown to 11.0% (growth rate: 0.00 pp/yr over 8 years). By 2022, it reached 32.0% (growth rate: 3.00 pp/yr over 7 years). 
+
+Trend Analysis: Growth rate changed from 0.00 pp/yr (2007-2015) to 3.00 pp/yr (2015-2022). Acceleration: +3.000 pp/yr². Trend: rapidly accelerating (ACCELERATING).
+
+Projection: At current growth rate (3.00 pp/yr), this anomaly will reach the 80% critical threshold in approximately 4.6 years.",Schedule repair within the next inspection cycle (3-7 years). Increase monitoring frequency for this location.,Growth is accelerating (+3.000 pp/yr²); Low match confidence (0.669) - verify chain linkage
+CHAIN_0143,ACCELERATING,NEAR_TERM,"This anomaly was first detected in 2007 at 39.0% depth. By 2015, it had grown to 32.0% (growth rate: -0.88 pp/yr over 8 years). By 2022, it reached 43.0% (growth rate: 1.57 pp/yr over 7 years). 
+
+Trend Analysis: Growth rate changed from -0.88 pp/yr (2007-2015) to 1.57 pp/yr (2015-2022). Acceleration: +2.446 pp/yr². Trend: rapidly accelerating (ACCELERATING).
+
+Projection: At current growth rate (1.57 pp/yr), this anomaly will reach the 80% critical threshold in approximately 4.8 years.",Schedule repair within the next inspection cycle (3-7 years). Increase monitoring frequency for this location.,Growth is accelerating (+2.446 pp/yr²); Low match confidence (0.622) - verify chain linkage
+CHAIN_0154,ACCELERATING,NEAR_TERM,"This anomaly was first detected in 2007 at 16.0% depth. By 2015, it had grown to 23.0% (growth rate: 0.88 pp/yr over 8 years). By 2022, it reached 41.0% (growth rate: 2.57 pp/yr over 7 years). 
+
+Trend Analysis: Growth rate changed from 0.88 pp/yr (2007-2015) to 2.57 pp/yr (2015-2022). Acceleration: +1.696 pp/yr². Trend: rapidly accelerating (ACCELERATING).
+
+Projection: At current growth rate (2.57 pp/yr), this anomaly will reach the 80% critical threshold in approximately 5.7 years.",Schedule repair within the next inspection cycle (3-7 years). Increase monitoring frequency for this location.,Growth is accelerating (+1.696 pp/yr²); Low match confidence (0.637) - verify chain linkage
+CHAIN_0181,ACCELERATING,NEAR_TERM,"This anomaly was first detected in 2007 at 20.0% depth. By 2015, it had grown to 20.0% (growth rate: 0.00 pp/yr over 8 years). By 2022, it reached 36.0% (growth rate: 2.29 pp/yr over 7 years). 
+
+Trend Analysis: Growth rate changed from 0.00 pp/yr (2007-2015) to 2.29 pp/yr (2015-2022). Acceleration: +2.286 pp/yr². Trend: rapidly accelerating (ACCELERATING).
+
+Projection: At current growth rate (2.29 pp/yr), this anomaly will reach the 80% critical threshold in approximately 5.5 years.",Schedule repair within the next inspection cycle (3-7 years). Increase monitoring frequency for this location.,Growth is accelerating (+2.286 pp/yr²); Low match confidence (0.648) - verify chain linkage
+CHAIN_0005,ACCELERATING,NEAR_TERM,"This anomaly was first detected in 2007 at 12.0% depth. By 2015, it had grown to 12.0% (growth rate: 0.00 pp/yr over 8 years). By 2022, it reached 30.0% (growth rate: 2.57 pp/yr over 7 years). 
+
+Trend Analysis: Growth rate changed from 0.00 pp/yr (2007-2015) to 2.57 pp/yr (2015-2022). Acceleration: +2.571 pp/yr². Trend: rapidly accelerating (ACCELERATING).
+
+Projection: At current growth rate (2.57 pp/yr), this anomaly will reach the 80% critical threshold in approximately 5.6 years.",Schedule repair within the next inspection cycle (3-7 years). Increase monitoring frequency for this location.,Growth is accelerating (+2.571 pp/yr²); Low match confidence (0.645) - verify chain linkage

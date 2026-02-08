@@ -482,6 +482,14 @@ explainer.llm_config['timeout'] = 300  # 5 minutes
 explainer.llm_config['temperature'] = 0.3  # More deterministic
 ```
 
+## Clustering Integration
+
+The agentic system now operates alongside the DBSCAN clustering engine. When generating match explanations, agents have access to each anomaly's `cluster_id` and the corresponding `InteractionZone` metadata (centroid, span, max depth, combined length). This allows agents to:
+
+- Identify when matched anomalies belong to the same or nearby interaction zones
+- Provide ASME B31G context in lifecycle narratives
+- Flag cluster-level growth patterns (e.g., several co-located anomalies all accelerating)
+
 ## Future Enhancements
 
 ### Planned Features

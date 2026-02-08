@@ -15,7 +15,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.api.routers import analysis, matching, growth, anomalies, explain, reports, webhooks, chains
+from src.api.routers import analysis, matching, growth, anomalies, explain, reports, webhooks, chains, clusters
 
 
 # ─── In-memory store for analysis results ─────────────────────────────
@@ -76,6 +76,7 @@ app.include_router(anomalies.router, prefix="/api", tags=["Anomalies"])
 app.include_router(explain.router, prefix="/api", tags=["AI Explain"])
 app.include_router(reports.router, prefix="/api", tags=["Reports"])
 app.include_router(chains.router, prefix="/api", tags=["Chains"])
+app.include_router(clusters.router, prefix="/api", tags=["Clusters"])
 app.include_router(webhooks.router, prefix="/webhook", tags=["Webhooks"])
 
 
@@ -103,6 +104,7 @@ async def root():
         "endpoints": {
             "analysis": "/api/analyze/three-way",
             "chains": "/api/chains",
+            "clusters": "/api/clusters/{run_id}",
             "matching": "/api/match/anomalies",
             "growth": "/api/growth/calculate",
             "anomalies": "/api/anomalies/{run_id}",

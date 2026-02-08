@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
 from typing import List
-from src.data_models import AnomalyRecord, ReferencePoint
+from src.data_models.models import AnomalyRecord, ReferencePoint
 
 
 @pytest.fixture

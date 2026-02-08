@@ -45,6 +45,13 @@ class ILIDataLoader:
             "ili wheel count \n[ft.]": "distance",
             "metal loss depth \n[%]": "depth_pct",
             "o'clock\n[hh:mm]": "clock_position",
+            # Operating pressure / risk columns
+            "mop [psi]": "mop_psi",
+            "evaluation pressure [psi]": "mop_psi",
+            "smys [psi]": "smys_psi",
+            "erf": "erf",
+            "wt [in]": "wall_thickness",
+            "t [in]": "wall_thickness",
         }
 
     def load_csv(
@@ -70,8 +77,12 @@ class ILIDataLoader:
             else:
                 inspection_date = datetime.now()
 
-        # Load CSV
-        df = pd.read_csv(file_path, low_memory=False)
+        # Load CSV or Excel
+        ext = Path(file_path).suffix.lower()
+        if ext in (".xlsx", ".xls"):
+            df = pd.read_excel(file_path)
+        else:
+            df = pd.read_csv(file_path, low_memory=False)
 
         # Normalize column names (lowercase, strip whitespace)
         df.columns = df.columns.str.lower().str.strip()

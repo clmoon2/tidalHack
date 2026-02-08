@@ -1,22 +1,169 @@
 match_id,confidence,explanation,recommendation,concerns
-RUN_2020_0 -> RUN_2022_0,HIGH,"**Explanation of Anomaly Match**
+RUN_2020_0 -> RUN_2022_0,HIGH,"Strong Match (Confidence: HIGH)
 
-Overall Match Quality: **Strong**
+Similarity Score: 0.984
 
-This match between RUN_2020_0 and RUN_2022_0 is a strong match, indicating that these are likely the same anomaly observed in two different inspection runs. The high overall similarity score of 0.984 is supported by near-identical distance and clock position, as well as matching anomaly types (external corrosion). The AlignmentAgent confirms good alignment quality based on the small distance difference and identical clock positions.
+This match was identified based on:
+- Distance proximity: 0.961
+- Clock position: 1.000
+- Feature type: 1.000
+- Dimensional similarity: 0.988
 
-The observed changes in depth, length, and width are consistent with the expected progression of external corrosion over the two-year period between inspections. Specifically, the +10% increase in depth and minor increases in length and width are reasonable. The ValidatorAgent affirms a high confidence level, based on the consistency of all features and the plausibility of the changes. No significant conflicting evidence was identified.",Accept this match with high confidence. The anomalies show strong correlation across all metrics.,Significant depth growth observed (+10.0%)
-RUN_2020_1 -> RUN_2022_1,HIGH,"**Explanation of Anomaly Match**
+Changes observed:
+- Depth: +10.0 percentage points
+- Length: +1.0 inches
+- Width: +0.5 inches
 
-Overall Match Quality: **Strong**
+Note: Full agent analysis unavailable (PermissionDeniedError: Error code: 403 - [{'error': {'code': 403, 'message': 'Your API key was reported as leaked. Please use another API key.', 'status': 'PERMISSION_DENIED'}}]
+Traceback:
+Traceback (most recent call last):
 
-The match between RUN_2020_1 and RUN_2022_1 represents a strong and highly reliable match. The overall similarity score of 0.986 reflects excellent agreement across all measured parameters. The AlignmentAgent confirms good alignment due to the minimal distance difference (1.0 ft) and identical clock positions. This indicates a high degree of confidence in the spatial correspondence between the two anomalies.
+  File ""C:\Users\carlu\AppData\Roaming\Python\Python313\site-packages\autogen_agentchat\teams\_group_chat\_chat_agent_container.py"", line 133, in handle_request
+    async for msg in self._agent.on_messages_stream(self._message_buffer, ctx.cancellation_token):
+    ...<4 lines>...
+            await self._log_message(msg)
 
-The changes observed in depth, length, and width are minimal, with a +2% change in depth and small increases in length (+0.2 inches) and width (+0.1 inches). These slight variations are likely attributable to either very slow corrosion growth over the two-year period or minor variations in measurement accuracy between the two inspection runs. The ValidatorAgent reinforces the high confidence level, noting that the changes are small, reasonable, and lack any conflicting information. This match is highly likely to represent the same anomaly observed in both inspections.",Accept this match with high confidence. The anomalies show strong correlation across all metrics.,Validator identified potential concerns
-RUN_2020_3 -> RUN_2022_2,HIGH,"**Explanation of Anomaly Match**
+  File ""C:\Users\carlu\AppData\Roaming\Python\Python313\site-packages\autogen_agentchat\agents\_assistant_agent.py"", line 953, in on_messages_stream
+    async for inference_output in self._call_llm(
+    ...<15 lines>...
+            yield inference_output
 
-Overall Match Quality: **Strong**
+  File ""C:\Users\carlu\AppData\Roaming\Python\Python313\site-packages\autogen_agentchat\agents\_assistant_agent.py"", line 1109, in _call_llm
+    model_result = await model_client.create(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
 
-This anomaly match between RUN_2020_3 and RUN_2022_2 is a strong indication that the same anomaly was observed in both inspection runs. The high overall similarity score of 0.986 is supported by a perfect clock match, identical anomaly types (external corrosion), and only a minimal distance difference of 1.0 ft, as confirmed by the AlignmentAgent. This suggests accurate alignment and minimal positional variation between the two runs.
+  File ""C:\Users\carlu\AppData\Roaming\Python\Python313\site-packages\autogen_ext\models\openai\_openai_client.py"", line 704, in create
+    result: Union[ParsedChatCompletion[BaseModel], ChatCompletion] = await future
+                                                                     ^^^^^^^^^^^^
 
-The changes in depth (+3.0%), length (+0.5 inches), and width (+0.2 inches) are small and consistent with expected corrosion growth over a two-year period. The ValidatorAgent confirms a high level of confidence in the match, based on the high similarity scores and the plausibility of the observed changes. There is no evidence to suggest that these anomalies are distinct or that the match is unreliable.",Accept this match with high confidence. The anomalies show strong correlation across all metrics.,Validator identified potential concerns
+  File ""C:\Users\carlu\AppData\Roaming\Python\Python313\site-packages\openai\resources\chat\completions\completions.py"", line 2678, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+    ...<49 lines>...
+    )
+    ^
+
+  File ""C:\Users\carlu\AppData\Roaming\Python\Python313\site-packages\openai\_base_client.py"", line 1797, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  File ""C:\Users\carlu\AppData\Roaming\Python\Python313\site-packages\openai\_base_client.py"", line 1597, in request
+    raise self._make_status_error_from_response(err.response) from None
+
+openai.PermissionDeniedError: Error code: 403 - [{'error': {'code': 403, 'message': 'Your API key was reported as leaked. Please use another API key.', 'status': 'PERMISSION_DENIED'}}]
+). This is a simplified explanation.",Accept match,Agent system unavailable - using fallback
+RUN_2020_1 -> RUN_2022_1,HIGH,"Strong Match (Confidence: HIGH)
+
+Similarity Score: 0.986
+
+This match was identified based on:
+- Distance proximity: 0.961
+- Clock position: 1.000
+- Feature type: 1.000
+- Dimensional similarity: 0.999
+
+Changes observed:
+- Depth: +2.0 percentage points
+- Length: +0.2 inches
+- Width: +0.1 inches
+
+Note: Full agent analysis unavailable (PermissionDeniedError: Error code: 403 - [{'error': {'code': 403, 'message': 'Your API key was reported as leaked. Please use another API key.', 'status': 'PERMISSION_DENIED'}}]
+Traceback:
+Traceback (most recent call last):
+
+  File ""C:\Users\carlu\AppData\Roaming\Python\Python313\site-packages\autogen_agentchat\teams\_group_chat\_chat_agent_container.py"", line 133, in handle_request
+    async for msg in self._agent.on_messages_stream(self._message_buffer, ctx.cancellation_token):
+    ...<4 lines>...
+            await self._log_message(msg)
+
+  File ""C:\Users\carlu\AppData\Roaming\Python\Python313\site-packages\autogen_agentchat\agents\_assistant_agent.py"", line 953, in on_messages_stream
+    async for inference_output in self._call_llm(
+    ...<15 lines>...
+            yield inference_output
+
+  File ""C:\Users\carlu\AppData\Roaming\Python\Python313\site-packages\autogen_agentchat\agents\_assistant_agent.py"", line 1109, in _call_llm
+    model_result = await model_client.create(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+
+  File ""C:\Users\carlu\AppData\Roaming\Python\Python313\site-packages\autogen_ext\models\openai\_openai_client.py"", line 704, in create
+    result: Union[ParsedChatCompletion[BaseModel], ChatCompletion] = await future
+                                                                     ^^^^^^^^^^^^
+
+  File ""C:\Users\carlu\AppData\Roaming\Python\Python313\site-packages\openai\resources\chat\completions\completions.py"", line 2678, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+    ...<49 lines>...
+    )
+    ^
+
+  File ""C:\Users\carlu\AppData\Roaming\Python\Python313\site-packages\openai\_base_client.py"", line 1797, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  File ""C:\Users\carlu\AppData\Roaming\Python\Python313\site-packages\openai\_base_client.py"", line 1597, in request
+    raise self._make_status_error_from_response(err.response) from None
+
+openai.PermissionDeniedError: Error code: 403 - [{'error': {'code': 403, 'message': 'Your API key was reported as leaked. Please use another API key.', 'status': 'PERMISSION_DENIED'}}]
+). This is a simplified explanation.",Accept match,Agent system unavailable - using fallback
+RUN_2020_3 -> RUN_2022_2,HIGH,"Strong Match (Confidence: HIGH)
+
+Similarity Score: 0.986
+
+This match was identified based on:
+- Distance proximity: 0.961
+- Clock position: 1.000
+- Feature type: 1.000
+- Dimensional similarity: 0.998
+
+Changes observed:
+- Depth: +3.0 percentage points
+- Length: +0.5 inches
+- Width: +0.2 inches
+
+Note: Full agent analysis unavailable (PermissionDeniedError: Error code: 403 - [{'error': {'code': 403, 'message': 'Your API key was reported as leaked. Please use another API key.', 'status': 'PERMISSION_DENIED'}}]
+Traceback:
+Traceback (most recent call last):
+
+  File ""C:\Users\carlu\AppData\Roaming\Python\Python313\site-packages\autogen_agentchat\teams\_group_chat\_chat_agent_container.py"", line 133, in handle_request
+    async for msg in self._agent.on_messages_stream(self._message_buffer, ctx.cancellation_token):
+    ...<4 lines>...
+            await self._log_message(msg)
+
+  File ""C:\Users\carlu\AppData\Roaming\Python\Python313\site-packages\autogen_agentchat\agents\_assistant_agent.py"", line 953, in on_messages_stream
+    async for inference_output in self._call_llm(
+    ...<15 lines>...
+            yield inference_output
+
+  File ""C:\Users\carlu\AppData\Roaming\Python\Python313\site-packages\autogen_agentchat\agents\_assistant_agent.py"", line 1109, in _call_llm
+    model_result = await model_client.create(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+
+  File ""C:\Users\carlu\AppData\Roaming\Python\Python313\site-packages\autogen_ext\models\openai\_openai_client.py"", line 704, in create
+    result: Union[ParsedChatCompletion[BaseModel], ChatCompletion] = await future
+                                                                     ^^^^^^^^^^^^
+
+  File ""C:\Users\carlu\AppData\Roaming\Python\Python313\site-packages\openai\resources\chat\completions\completions.py"", line 2678, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+    ...<49 lines>...
+    )
+    ^
+
+  File ""C:\Users\carlu\AppData\Roaming\Python\Python313\site-packages\openai\_base_client.py"", line 1797, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  File ""C:\Users\carlu\AppData\Roaming\Python\Python313\site-packages\openai\_base_client.py"", line 1597, in request
+    raise self._make_status_error_from_response(err.response) from None
+
+openai.PermissionDeniedError: Error code: 403 - [{'error': {'code': 403, 'message': 'Your API key was reported as leaked. Please use another API key.', 'status': 'PERMISSION_DENIED'}}]
+). This is a simplified explanation.",Accept match,Agent system unavailable - using fallback

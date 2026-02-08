@@ -45,7 +45,15 @@
 - ✅ Distance correction function (scipy interpolation)
 - ⏳ Alignment validation (deferred to post-MVP)
 
-#### 3. Matching Engine (100%)
+#### 3. Clustering Engine (100%) ✨ NEW
+- ✅ DBSCAN-based interaction zone detection (ASME B31G)
+- ✅ Circular clock-position handling (12→1 wrap)
+- ✅ Configurable axial & circumferential thresholds
+- ✅ InteractionZone data model with centroid, span, max depth
+- ✅ REST API endpoint (`GET /api/clusters/{run_id}`)
+- ✅ Integrated as Step 2 of 11-step pipeline
+
+#### 4. Matching Engine (100%)
 - ✅ Multi-criteria similarity calculator
 - ✅ Hungarian algorithm matcher
 - ✅ Confidence scoring (HIGH/MEDIUM/LOW)
@@ -144,6 +152,9 @@ ili-data-alignment-system/
 │   ├── alignment/          # DTW alignment and distance correction
 │   │   ├── dtw_aligner.py
 │   │   └── correction.py
+│   ├── analysis/           # ThreeWayAnalyzer + ClusterDetector (DBSCAN)
+│   │   ├── three_way_analyzer.py
+│   │   └── cluster_detector.py
 │   ├── matching/           # Similarity and Hungarian matching
 │   │   ├── similarity.py
 │   │   └── matcher.py
@@ -255,6 +266,7 @@ Risk Score Rankings:
 
 ### Algorithms
 - **DTW**: Dynamic Time Warping with drift constraint
+- **DBSCAN**: Interaction-zone clustering (scikit-learn) with circular clock features
 - **Hungarian**: Optimal assignment via linear_sum_assignment
 - **Similarity**: Exponential decay functions
 - **Interpolation**: Scipy piecewise linear
@@ -263,6 +275,7 @@ Risk Score Rankings:
 - **Pandas**: Data manipulation
 - **NumPy**: Numerical computing
 - **SciPy**: Scientific algorithms
+- **scikit-learn**: DBSCAN clustering
 - **Pydantic**: Data validation
 - **Streamlit**: Web dashboard
 - **Plotly**: Interactive charts

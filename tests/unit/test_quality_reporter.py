@@ -193,10 +193,10 @@ class TestQualityReporter:
         depth_stats = stats["depth_statistics"]
         assert depth_stats["min"] == 25.0
         assert depth_stats["max"] == 85.0
-        assert depth_stats["critical_count"] == 1  # One anomaly > 80%
-        assert depth_stats["high_count"] == 1  # One anomaly 50-80%
-        assert depth_stats["moderate_count"] == 1  # One anomaly 30-50%
-        assert depth_stats["low_count"] == 2  # Two anomalies < 30%
+        assert depth_stats["critical_count"] == 1  # One anomaly > 80% (85%)
+        assert depth_stats["high_count"] == 1  # One anomaly 50-80% (55%)
+        assert depth_stats["moderate_count"] == 2  # Two anomalies 30-50% (35%, 45%)
+        assert depth_stats["low_count"] == 1  # One anomaly < 30% (25%)
 
     def test_anomaly_statistics_empty_df(self, reporter):
         """Test anomaly statistics with empty DataFrame."""
@@ -534,7 +534,7 @@ class TestQualityReporter:
             assert output_path.exists()
             
             # Check file content
-            with open(output_path) as f:
+            with open(output_path, encoding='utf-8') as f:
                 content = f.read()
             
             assert "ILI DATA QUALITY REPORT" in content

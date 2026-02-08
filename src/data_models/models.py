@@ -4,7 +4,7 @@ Pydantic data models for ILI system.
 This module defines the core data structures with validation.
 """
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 from typing import Optional, List, Literal, Dict, Any
 from datetime import datetime
 
@@ -24,6 +24,7 @@ class AnomalyRecord(BaseModel):
     feature_type: Literal["external_corrosion", "internal_corrosion", "dent", "crack", "other"]
     coating_type: Optional[str] = None
     inspection_date: datetime
+    cluster_id: Optional[str] = Field(None, description="InteractionZone ID if part of a cluster")
 
     @field_validator("clock_position")
     @classmethod
@@ -58,18 +59,16 @@ class Match(BaseModel):
     length_similarity: float
     width_similarity: float
 
-    @field_validator("confidence", mode="before")
-    @classmethod
-    def set_confidence(cls, v: Any, info: Any) -> str:
-        # Access similarity_score from the data being validated
-        data = info.data
-        score = data.get("similarity_score", 0)
-        if score >= 0.8:
-            return "HIGH"
-        elif score >= 0.6:
-            return "MEDIUM"
+    @model_validator(mode="after")
+    def set_confidence_from_score(self) -> "Match":
+        """Set confidence level based on similarity score."""
+        if self.similarity_score >= 0.8:
+            self.confidence = "HIGH"
+        elif self.similarity_score >= 0.6:
+            self.confidence = "MEDIUM"
         else:
-            return "LOW"
+            self.confidence = "LOW"
+        return self
 
 
 class GrowthMetrics(BaseModel):
@@ -83,11 +82,11 @@ class GrowthMetrics(BaseModel):
     is_rapid_growth: bool = False
     risk_score: float = Field(..., ge=0, le=1)
 
-    @field_validator("is_rapid_growth", mode="before")
-    @classmethod
-    def check_rapid_growth(cls, v: Any, info: Any) -> bool:
-        data = info.data
-        return data.get("depth_growth_rate", 0) > 5.0
+    @model_validator(mode="after")
+    def check_rapid_growth_from_rate(self) -> "GrowthMetrics":
+        """Set is_rapid_growth based on depth_growth_rate."""
+        self.is_rapid_growth = self.depth_growth_rate > 5.0
+        return self
 
 
 class Prediction(BaseModel):
@@ -217,6 +216,21 @@ class ComplianceReport(BaseModel):
     compliance_status: Literal["COMPLIANT", "NON_COMPLIANT"]
 
 
+class InteractionZone(BaseModel):
+    """A cluster of spatially-grouped anomalies forming an ASME B31G interaction zone."""
+
+    zone_id: str = Field(..., description="Unique zone identifier")
+    run_id: str = Field(..., description="Inspection run this zone belongs to")
+    anomaly_ids: List[str] = Field(..., description="IDs of anomalies in this zone")
+    anomaly_count: int = Field(..., ge=2, description="Number of anomalies in the zone")
+    centroid_distance: float = Field(..., ge=0, description="Mean axial position in feet")
+    centroid_clock: float = Field(..., ge=1, le=12, description="Mean clock position")
+    span_distance_ft: float = Field(..., ge=0, description="Max-min distance within zone (ft)")
+    span_clock: float = Field(..., ge=0, description="Max-min clock within zone")
+    max_depth_pct: float = Field(..., ge=0, le=100, description="Worst anomaly depth in the group")
+    combined_length_in: float = Field(..., ge=0, description="Sum of individual anomaly lengths (conservative per B31G)")
+
+
 class AnomalyWithRegulatory(AnomalyRecord):
     """Extended anomaly record with regulatory fields"""
 
@@ -309,6 +323,41 @@ class ThreeWayAnalysisResult(BaseModel):
     immediate_action_count: int = 0
     avg_growth_rate_07_15: float = 0.0
     avg_growth_rate_15_22: float = 0.0
+    # Clustering / interaction zone fields
+    interaction_zones_2007: List[InteractionZone] = Field(default_factory=list)
+    interaction_zones_2015: List[InteractionZone] = Field(default_factory=list)
+    interaction_zones_2022: List[InteractionZone] = Field(default_factory=list)
+    total_clusters: int = 0
+    clustered_anomaly_pct: float = 0.0
+    # ─── DTW Correction Status ──────────────────────────────────────────
+    dtw_applied_07_15: bool = Field(
+        default=False,
+        description=(
+            "Whether DTW distance correction was successfully applied "
+            "to the 2007-2015 interval. False indicates fallback to raw distances."
+        ),
+    )
+    dtw_applied_15_22: bool = Field(
+        default=False,
+        description=(
+            "Whether DTW distance correction was successfully applied "
+            "to the 2015-2022 interval. False indicates fallback to raw distances."
+        ),
+    )
+    dtw_fallback_reason_07_15: Optional[str] = Field(
+        default=None,
+        description=(
+            "Reason for DTW correction failure on 2007-2015 interval. "
+            "None if correction was successful."
+        ),
+    )
+    dtw_fallback_reason_15_22: Optional[str] = Field(
+        default=None,
+        description=(
+            "Reason for DTW correction failure on 2015-2022 interval. "
+            "None if correction was successful."
+        ),
+    )
     status: Literal["PENDING", "RUNNING", "COMPLETE", "FAILED"] = "PENDING"
     error_message: Optional[str] = None
 

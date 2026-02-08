@@ -4,10 +4,107 @@ This guide covers the advanced ML and LLM features of the ILI Data Alignment Sys
 
 ## Table of Contents
 
-1. [ML Growth Prediction](#ml-growth-prediction)
-2. [Natural Language Queries](#natural-language-queries)
-3. [Setup and Configuration](#setup-and-configuration)
-4. [API Reference](#api-reference)
+1. [DBSCAN Clustering (ASME B31G Interaction Zones)](#dbscan-clustering-asme-b31g-interaction-zones)
+2. [ML Growth Prediction](#ml-growth-prediction)
+3. [Natural Language Queries](#natural-language-queries)
+4. [Setup and Configuration](#setup-and-configuration)
+5. [API Reference](#api-reference)
+
+---
+
+## DBSCAN Clustering (ASME B31G Interaction Zones)
+
+### Overview
+
+The clustering module automatically identifies groups of spatially proximate anomalies within a single inspection run that form **ASME B31G interaction zones**. It uses scikit-learn's DBSCAN algorithm — a density-based clustering method that is ideal for this use case because it:
+
+- **Requires no pre-specified cluster count** — the number of zones emerges from the data
+- **Naturally classifies isolated anomalies as noise** — only groups that meet the density threshold become clusters
+- **Works directly with physical proximity thresholds** — axial separation (ft) and circumferential separation (clock hours)
+
+### How It Works
+
+1. **Feature extraction** — For each anomaly, the `(distance, clock_position)` pair is extracted.
+2. **Circular clock handling** — Clock positions (1–12) are converted to `(cos θ, sin θ)` coordinates so that 12 o'clock and 1 o'clock are treated as neighbours.
+3. **Feature scaling** — Axial distances are divided by `axial_threshold_ft` and circumferential coordinates are scaled by the chord length at `clock_threshold` so that `eps = 1.0` respects both thresholds equally.
+4. **DBSCAN** — `DBSCAN(eps=1.0, min_samples=min_cluster_size, metric='euclidean')` is run on the 3-column feature matrix `[scaled_dist, scaled_cx, scaled_cy]`.
+5. **Zone construction** — Each cluster label is packaged into an `InteractionZone` object containing centroid position, span, maximum depth, combined length, and member anomaly IDs.
+
+### Quick Start
+
+```python
+from src.analysis.cluster_detector import ClusterDetector
+
+detector = ClusterDetector(
+    axial_threshold_ft=1.0,   # max axial separation (ft) for neighbours
+    clock_threshold=1.5,      # max circumferential separation (clock hours)
+    min_cluster_size=2,       # DBSCAN min_samples
+)
+
+# Run on a single inspection run
+updated_anomalies, zones = detector.detect_clusters(anomalies, "RUN_2022")
+
+print(f"Interaction zones: {len(zones)}")
+for zone in zones:
+    print(f"  {zone.zone_id}: {zone.anomaly_count} anomalies, "
+          f"centroid {zone.centroid_distance:.0f} ft @ {zone.centroid_clock} o'clock, "
+          f"max depth {zone.max_depth_pct:.1f}%, "
+          f"combined length {zone.combined_length_in:.1f} in")
+
+# Clustered anomalies now carry a cluster_id
+clustered = [a for a in updated_anomalies if a.cluster_id]
+print(f"Clustered: {len(clustered)} / {len(updated_anomalies)} "
+      f"({len(clustered)/len(updated_anomalies)*100:.1f}%)")
+```
+
+### Configuration Parameters
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `axial_threshold_ft` | 1.0 | Maximum axial separation in feet for two anomalies to be neighbours (~6× wall thickness) |
+| `clock_threshold` | 1.5 | Maximum circumferential separation in clock hours |
+| `min_cluster_size` | 2 | Minimum number of anomalies to form a cluster (DBSCAN `min_samples`) |
+| `wall_thickness_in` | 0.25 | Nominal wall thickness in inches (informational) |
+
+### InteractionZone Data Model
+
+Each detected cluster is represented as an `InteractionZone`:
+
+```python
+class InteractionZone(BaseModel):
+    zone_id: str              # e.g. "ZONE_RUN_2022_0001"
+    run_id: str               # Inspection run this zone belongs to
+    anomaly_ids: List[str]    # IDs of member anomalies
+    anomaly_count: int        # Number of anomalies (>= 2)
+    centroid_distance: float  # Mean axial position (ft)
+    centroid_clock: float     # Circular mean clock position (1–12)
+    span_distance_ft: float   # Max − min distance within zone (ft)
+    span_clock: float         # Smallest arc containing all clock positions
+    max_depth_pct: float      # Worst-case depth in the group (%)
+    combined_length_in: float # Sum of individual lengths (conservative per B31G)
+```
+
+### REST API
+
+```bash
+# Detect interaction zones for a specific run
+GET /api/clusters/{run_id}?axial_threshold_ft=1.0&clock_threshold=1.5&min_cluster_size=2
+
+# Example
+GET /api/clusters/RUN_2022
+```
+
+**Response** includes `zones`, `total_zones`, `clustered_anomaly_count`, `total_anomaly_count`, and `clustered_pct`.
+
+### Pipeline Integration
+
+Clustering runs as **Step 2 of 11** in the three-way analysis pipeline (`ThreeWayAnalyzer.run_full_analysis`). It executes immediately after data loading and before DTW alignment:
+
+```
+1. Load datasets → 2. DBSCAN clustering → 3. Extract ref points → 4–5. DTW align → …
+```
+
+The resulting `InteractionZone` lists are stored in `ThreeWayAnalysisResult.interaction_zones_2007/2015/2022`, along with aggregate `total_clusters` and `clustered_anomaly_pct` fields.
 
 ---
 
@@ -273,6 +370,35 @@ python examples/nl_query_example.py
 
 ## API Reference
 
+### ClusterDetector
+
+```python
+class ClusterDetector:
+    def __init__(
+        self,
+        axial_threshold_ft: float = 1.0,
+        clock_threshold: float = 1.5,
+        min_cluster_size: int = 2,
+        wall_thickness_in: float = 0.25,
+    )
+
+    def detect_clusters(
+        self,
+        anomalies: List[AnomalyRecord],
+        run_id: str,
+    ) -> Tuple[List[AnomalyRecord], List[InteractionZone]]
+```
+
+Detects ASME B31G interaction zones using DBSCAN clustering.
+
+**Parameters:**
+- `anomalies`: List of anomaly records from a single run
+- `run_id`: Inspection run identifier
+
+**Returns:** Tuple of updated anomalies (with `cluster_id` set) and list of `InteractionZone` objects.
+
+---
+
 ### FeatureEngineer
 
 ```python
@@ -489,5 +615,5 @@ For questions or issues:
 
 ---
 
-**Last Updated**: February 7, 2026  
-**Version**: 1.0.0
+**Last Updated**: February 8, 2026  
+**Version**: 1.1.0

@@ -5,19 +5,20 @@ Three-Way Analyzer
 Performs full three-way analysis across 2007 → 2015 → 2022 inspection runs.
 
 Workflow:
-1. Load all 3 datasets
-2. Extract reference points (girth welds) from each run
-3. DTW-align 2007→2015 reference points, build distance correction function
-4. DTW-align 2015→2022 reference points, build distance correction function
-5. Match drift-corrected 2007 → 2015 (Hungarian algorithm)
-6. Match drift-corrected 2015 → 2022
-7. Build chains (link same anomaly across all 3 runs)
-8. Calculate growth for BOTH intervals + acceleration
-9. Risk scoring
-10. AI storytelling for top N chains
+1.  Load all 3 datasets
+2.  Cluster detection (ASME B31G interaction zones) per run
+3.  Extract reference points (girth welds) from each run
+4.  DTW-align 2007→2015 reference points, build distance correction function
+5.  DTW-align 2015→2022 reference points, build distance correction function
+6.  Match drift-corrected 2007 → 2015 (Hungarian algorithm)
+7.  Match drift-corrected 2015 → 2022
+8.  Build chains (link same anomaly across all 3 runs)
+9.  Calculate growth for BOTH intervals + acceleration
+10. Risk scoring
+11. AI storytelling for top N chains
 
 Author: ILI Data Alignment System
-Date: 2025
+Date: 2026
 """
 
 import uuid
@@ -34,6 +35,7 @@ from src.data_models.models import (
     AnomalyChain,
     ChainExplanation,
     ThreeWayAnalysisResult,
+    InteractionZone,
     Match,
     ReferencePoint,
 )
@@ -44,6 +46,7 @@ from src.matching.matcher import HungarianMatcher
 from src.matching.similarity import SimilarityCalculator
 from src.growth.analyzer import GrowthAnalyzer
 from src.growth.risk_scorer import RiskScorer
+from src.analysis.cluster_detector import ClusterDetector
 from src.agents.chain_storyteller import ChainStorytellerSystem, TrendAgent, ProjectionAgent
 
 
@@ -65,6 +68,9 @@ class ThreeWayAnalyzer:
         use_agents: bool = True,
         api_key: Optional[str] = None,
         drift_constraint: float = 0.10,
+        cluster_axial_ft: float = 1.0,
+        cluster_clock: float = 1.5,
+        cluster_min_size: int = 2,
     ):
         """
         Initialize the three-way analyzer.
@@ -77,6 +83,9 @@ class ThreeWayAnalyzer:
             use_agents: Whether to use AI agents for explanations
             api_key: Google API key for agents
             drift_constraint: Maximum allowed odometer drift fraction for DTW (default 10%)
+            cluster_axial_ft: Axial proximity threshold for clustering (ft)
+            cluster_clock: Clock proximity threshold for clustering (hours)
+            cluster_min_size: Minimum anomalies to form a cluster
         """
         self.similarity_calc = SimilarityCalculator(
             distance_sigma=distance_sigma, clock_sigma=clock_sigma
@@ -90,6 +99,11 @@ class ThreeWayAnalyzer:
         )
         self.risk_scorer = RiskScorer(
             depth_weight=0.6, growth_weight=0.3, location_weight=0.1
+        )
+        self.cluster_detector = ClusterDetector(
+            axial_threshold_ft=cluster_axial_ft,
+            clock_threshold=cluster_clock,
+            min_cluster_size=cluster_min_size,
         )
         self.use_agents = use_agents
         self.api_key = api_key
@@ -184,7 +198,7 @@ class ThreeWayAnalyzer:
         ref_target: List[ReferencePoint],
         source_run_id: str,
         target_run_id: str,
-    ) -> Tuple[List[AnomalyRecord], Optional[Dict[str, Any]]]:
+    ) -> Tuple[List[AnomalyRecord], bool, Optional[str], Optional[Dict[str, Any]]]:
         """
         Run DTW alignment between two sets of reference points and apply the
         resulting distance-correction function to every anomaly in the source
@@ -202,9 +216,11 @@ class ThreeWayAnalyzer:
             target_run_id: Run ID of the target run
 
         Returns:
-            Tuple of:
-                - List of AnomalyRecord with corrected distances
-                - Alignment info dict (or None if alignment was skipped)
+            Tuple containing:
+                - List[AnomalyRecord]: Corrected anomalies (or original if correction failed)
+                - bool: True if DTW correction was applied, False if fallback to raw
+                - Optional[str]: Reason for fallback (None if correction succeeded)
+                - Optional[Dict[str, Any]]: Alignment statistics (None if correction failed)
         """
         # ── 1. Prefer girth welds for alignment ────────────────────────
         gw_source = [rp for rp in ref_source if rp.point_type == "girth_weld"]
@@ -219,9 +235,13 @@ class ThreeWayAnalyzer:
             print(
                 f"  [WARN] Too few reference points for alignment "
                 f"({len(gw_source)} source, {len(gw_target)} target). "
-                f"Skipping distance correction for {source_run_id} → {target_run_id}."
+                f"Skipping distance correction for {source_run_id} -> {target_run_id}."
             )
-            return anomalies_source, None
+            reason = (
+                f"Insufficient reference points: {len(gw_source)} in {source_run_id}, "
+                f"{len(gw_target)} in {target_run_id} (minimum: 2 each)"
+            )
+            return anomalies_source, False, reason, None
 
         # ── 2. DTW alignment ───────────────────────────────────────────
         try:
@@ -259,15 +279,16 @@ class ThreeWayAnalyzer:
                 "matched_pairs": len(alignment.matched_points),
                 **info,
             }
-            return corrected, alignment_info
+            return corrected, True, None, alignment_info
 
         except Exception as e:
             # Alignment quality below threshold, insufficient data, etc.
             print(
-                f"  [WARN] DTW alignment failed for {source_run_id} → {target_run_id}: {e}"
+                f"  [WARN] DTW alignment failed for {source_run_id} -> {target_run_id}: {e}"
             )
             print("  Proceeding with raw odometer distances.")
-            return anomalies_source, None
+            reason = f"DTW alignment failed: {str(e)}"
+            return anomalies_source, False, reason, None
 
     def run_full_analysis(
         self,
@@ -302,11 +323,11 @@ class ThreeWayAnalyzer:
         date_2022 = date_2022 or datetime(2022, 1, 1)
 
         print("=" * 80)
-        print("THREE-WAY ANALYSIS: 2007 -> 2015 -> 2022  (with DTW drift correction)")
+        print("THREE-WAY ANALYSIS: 2007 -> 2015 -> 2022  (with DTW drift correction + clustering)")
         print("=" * 80)
 
         # ─── Step 1: Load all 3 datasets ────────────────────────────────
-        print("\n[1/10] Loading datasets...")
+        print("\n[1/11] Loading datasets...")
         anomalies_2007, ref_df_2007 = self.load_dataset(
             data_2007_path, "RUN_2007", date_2007
         )
@@ -322,8 +343,39 @@ class ThreeWayAnalyzer:
             f"{len(anomalies_2007) + len(anomalies_2015) + len(anomalies_2022)} total"
         )
 
-        # ─── Step 2: Extract reference points for alignment ────────────
-        print("\n[2/10] Extracting reference points (girth welds) for DTW alignment...")
+        # ─── Step 2: Cluster detection (ASME B31G interaction zones) ───
+        print("\n[2/11] Detecting ASME B31G interaction zones (DBSCAN clustering)...")
+        anomalies_2007, zones_2007 = self.cluster_detector.detect_clusters(
+            anomalies_2007, "RUN_2007"
+        )
+        anomalies_2015, zones_2015 = self.cluster_detector.detect_clusters(
+            anomalies_2015, "RUN_2015"
+        )
+        anomalies_2022, zones_2022 = self.cluster_detector.detect_clusters(
+            anomalies_2022, "RUN_2022"
+        )
+        total_clusters = len(zones_2007) + len(zones_2015) + len(zones_2022)
+        total_anomalies_all = len(anomalies_2007) + len(anomalies_2015) + len(anomalies_2022)
+        clustered_count = sum(1 for a in anomalies_2007 if a.cluster_id) + \
+                          sum(1 for a in anomalies_2015 if a.cluster_id) + \
+                          sum(1 for a in anomalies_2022 if a.cluster_id)
+        clustered_pct = (clustered_count / total_anomalies_all * 100) if total_anomalies_all else 0.0
+        print(
+            f"  Clusters found: {len(zones_2007)} (2007) | "
+            f"{len(zones_2015)} (2015) | {len(zones_2022)} (2022) = "
+            f"{total_clusters} total"
+        )
+        print(
+            f"  Clustered anomalies: {clustered_count}/{total_anomalies_all} "
+            f"({clustered_pct:.1f}%)"
+        )
+        if zones_2007 or zones_2015 or zones_2022:
+            all_zones = zones_2007 + zones_2015 + zones_2022
+            largest = max(z.anomaly_count for z in all_zones)
+            print(f"  Largest cluster size: {largest} anomalies")
+
+        # ─── Step 3: Extract reference points for alignment ────────────
+        print("\n[3/11] Extracting reference points (girth welds) for DTW alignment...")
         ref_pts_2007 = self._convert_ref_df_to_models(ref_df_2007, "RUN_2007")
         ref_pts_2015 = self._convert_ref_df_to_models(ref_df_2015, "RUN_2015")
         ref_pts_2022 = self._convert_ref_df_to_models(ref_df_2022, "RUN_2022")
@@ -336,20 +388,30 @@ class ThreeWayAnalyzer:
             f"{len(ref_pts_2022)} (2022, {gw_22} welds)"
         )
 
-        # ─── Step 3: DTW align 2007→2015, correct 2007 distances ──────
-        print("\n[3/10] DTW alignment: 2007 → 2015 (correcting 2007 odometer drift)...")
-        anomalies_2007_corrected, align_info_07_15 = self._align_and_correct(
+        # ─── Step 4: DTW align 2007→2015, correct 2007 distances ──────
+        print("\n[4/11] DTW alignment: 2007 -> 2015 (correcting 2007 odometer drift)...")
+        (
+            anomalies_2007_corrected,
+            dtw_applied_07_15,
+            dtw_fallback_reason_07_15,
+            align_info_07_15,
+        ) = self._align_and_correct(
             anomalies_2007, ref_pts_2007, ref_pts_2015, "RUN_2007", "RUN_2015"
         )
 
-        # ─── Step 4: DTW align 2015→2022, correct 2015 distances ──────
-        print("\n[4/10] DTW alignment: 2015 → 2022 (correcting 2015 odometer drift)...")
-        anomalies_2015_corrected, align_info_15_22 = self._align_and_correct(
+        # ─── Step 5: DTW align 2015→2022, correct 2015 distances ──────
+        print("\n[5/11] DTW alignment: 2015 -> 2022 (correcting 2015 odometer drift)...")
+        (
+            anomalies_2015_corrected,
+            dtw_applied_15_22,
+            dtw_fallback_reason_15_22,
+            align_info_15_22,
+        ) = self._align_and_correct(
             anomalies_2015, ref_pts_2015, ref_pts_2022, "RUN_2015", "RUN_2022"
         )
 
-        # ─── Step 5: Match corrected-2007 → 2015 ──────────────────────
-        print("\n[5/10] Matching corrected-2007 → 2015 (8-year interval)...")
+        # ─── Step 6: Match corrected-2007 → 2015 ──────────────────────
+        print("\n[6/11] Matching corrected-2007 -> 2015 (8-year interval)...")
         start = time.time()
         result_07_15 = self.matcher.match_anomalies(
             anomalies_2007_corrected, anomalies_2015, "RUN_2007", "RUN_2015"
@@ -360,8 +422,8 @@ class ThreeWayAnalyzer:
             f"({stats_07_15['match_rate']:.1%} rate)"
         )
 
-        # ─── Step 6: Match corrected-2015 → 2022 ──────────────────────
-        print("\n[6/10] Matching corrected-2015 → 2022 (7-year interval)...")
+        # ─── Step 7: Match corrected-2015 → 2022 ──────────────────────
+        print("\n[7/11] Matching corrected-2015 -> 2022 (7-year interval)...")
         start = time.time()
         result_15_22 = self.matcher.match_anomalies(
             anomalies_2015_corrected, anomalies_2022, "RUN_2015", "RUN_2022"
@@ -372,14 +434,14 @@ class ThreeWayAnalyzer:
             f"({stats_15_22['match_rate']:.1%} rate)"
         )
 
-        # ─── Step 7: Build chains ──────────────────────────────────────
+        # ─── Step 8: Build chains ──────────────────────────────────────
         # NOTE: _build_chains uses anomaly IDs to look up objects.  We pass
         # the *corrected* source anomalies so that any downstream distance-
         # based logic (e.g. chain metadata) reflects drift-corrected values,
         # while the target run anomalies remain in their native coordinate
         # system (the correction maps source→target, so target is already
         # in the "true" frame of reference).
-        print("\n[7/10] Building 3-way chains...")
+        print("\n[8/11] Building 3-way chains...")
         chains = self._build_chains(
             anomalies_2007_corrected,
             anomalies_2015,
@@ -389,8 +451,8 @@ class ThreeWayAnalyzer:
         )
         print(f"  Found {len(chains)} complete 3-way chains")
 
-        # ─── Step 8: Calculate growth and acceleration ─────────────────
-        print("\n[8/10] Computing growth rates and acceleration...")
+        # ─── Step 9: Calculate growth and acceleration ─────────────────
+        print("\n[9/11] Computing growth rates and acceleration...")
         chain_models = self._compute_growth_and_risk(chains)
         accelerating = sum(1 for c in chain_models if c.is_accelerating)
         decelerating = sum(
@@ -401,17 +463,17 @@ class ThreeWayAnalyzer:
             f"  Accelerating: {accelerating} | Stable: {stable} | Decelerating: {decelerating}"
         )
 
-        # ─── Step 9: Risk scoring ─────────────────────────────────────
-        print("\n[9/10] Risk scoring...")
+        # ─── Step 10: Risk scoring ────────────────────────────────────
+        print("\n[10/11] Risk scoring...")
         # Sort chains by risk score
         chain_models.sort(key=lambda c: c.risk_score, reverse=True)
         high_risk = sum(1 for c in chain_models if c.risk_score >= 0.7)
         print(f"  High-risk chains (>= 0.7): {high_risk}")
 
-        # ─── Step 10: AI storytelling ──────────────────────────────────
+        # ─── Step 11: AI storytelling ─────────────────────────────────
         explanations = []
         if self.use_agents and len(chain_models) > 0:
-            print(f"\n[10/10] AI storytelling for top {min(top_n_explain, len(chain_models))} chains...")
+            print(f"\n[11/11] AI storytelling for top {min(top_n_explain, len(chain_models))} chains...")
             try:
                 storyteller = ChainStorytellerSystem(api_key=self.api_key)
                 chain_dicts = [
@@ -455,9 +517,9 @@ class ThreeWayAnalyzer:
             except Exception as e:
                 print(f"  [WARN] AI storytelling failed: {e}")
         else:
-            print("\n[10/10] AI storytelling skipped (agents disabled or no chains)")
+            print("\n[11/11] AI storytelling skipped (agents disabled or no chains)")
 
-        # ─── Step 9: Build result ──────────────────────────────────────
+        # ─── Build result ─────────────────────────────────────────────
         print("\nBuilding final result...")
 
         # Calculate average growth rates
@@ -490,14 +552,33 @@ class ThreeWayAnalyzer:
             immediate_action_count=immediate_count,
             avg_growth_rate_07_15=avg_gr_07_15,
             avg_growth_rate_15_22=avg_gr_15_22,
+            interaction_zones_2007=zones_2007,
+            interaction_zones_2015=zones_2015,
+            interaction_zones_2022=zones_2022,
+            total_clusters=total_clusters,
+            clustered_anomaly_pct=clustered_pct,
+            dtw_applied_07_15=dtw_applied_07_15,
+            dtw_applied_15_22=dtw_applied_15_22,
+            dtw_fallback_reason_07_15=dtw_fallback_reason_07_15,
+            dtw_fallback_reason_15_22=dtw_fallback_reason_15_22,
             status="COMPLETE",
         )
+
+        # ─── DTW Status Summary ─────────────────────────────────────────
+        print("\n=== DTW Correction Status ===")
+        print(f"  2007->2015: {'[OK] Applied' if dtw_applied_07_15 else '[X] Fallback'}")
+        if dtw_fallback_reason_07_15:
+            print(f"    Reason: {dtw_fallback_reason_07_15}")
+        print(f"  2015->2022: {'[OK] Applied' if dtw_applied_15_22 else '[X] Fallback'}")
+        if dtw_fallback_reason_15_22:
+            print(f"    Reason: {dtw_fallback_reason_15_22}")
+        print()
 
         # Save output files if requested
         if output_dir:
             self._save_outputs(result, output_dir)
 
-        print("\n" + "=" * 80)
+        print("=" * 80)
         print(f"ANALYSIS COMPLETE: {len(chain_models)} chains, {len(explanations)} explained")
         print("=" * 80)
 

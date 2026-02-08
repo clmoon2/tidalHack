@@ -1,0 +1,25 @@
+{
+  "analysis_id": "be4c4754",
+  "timestamp": "2026-02-08T03:38:57.446015",
+  "total_anomalies": {
+    "2007": 711,
+    "2015": 1768,
+    "2022": 2636
+  },
+  "matching": {
+    "matched_07_15": 454,
+    "matched_15_22": 1640,
+    "total_chains": 362
+  },
+  "trends": {
+    "accelerating": 239,
+    "stable": 38,
+    "decelerating": 85
+  },
+  "risk": {
+    "immediate_action_count": 0,
+    "avg_growth_07_15": 0.02106353591160221,
+    "avg_growth_15_22": 0.2853196527229676
+  },
+  "status": "COMPLETE"
+}

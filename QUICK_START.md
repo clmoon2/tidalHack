@@ -83,10 +83,11 @@ streamlit run src/dashboard/app.py
 ### Core Features
 - Data ingestion & validation
 - DTW alignment
+- DBSCAN clustering (ASME B31G interaction zones) ✨
 - Hungarian algorithm matching (96%+ match rate)
 - Growth rate analysis
 - Risk scoring
-- 3-way analysis (15-year tracking)
+- 3-way analysis (15-year tracking, 11-step pipeline)
 - Interactive dashboard
 
 ## Database

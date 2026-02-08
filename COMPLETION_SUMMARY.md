@@ -9,11 +9,12 @@
 ### Core MVP (100%)
 ✅ Data ingestion and validation  
 ✅ DTW alignment and distance correction  
+✅ DBSCAN clustering (ASME B31G interaction zones) ✨ NEW  
 ✅ Hungarian algorithm matching (96%+ match rate)  
 ✅ Growth rate analysis (FIXED - absolute change)  
 ✅ Risk scoring (composite formula)  
 ✅ Streamlit dashboard  
-✅ 3-way analysis (15-year tracking)  
+✅ 3-way analysis (15-year tracking, 11-step pipeline)  
 ✅ Real data validation (5,115 anomalies)  
 
 ### Advanced Features (NEW - 100%)

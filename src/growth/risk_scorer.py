@@ -15,17 +15,22 @@ class RiskScorer:
     
     Risk formula: (depth/100)*0.6 + (growth_rate/10)*0.3 + location_factor*0.1
     
+    An additional configurable boost is applied when an anomaly belongs to
+    an ASME B31G interaction zone (``cluster_id`` is set).
+    
     Components:
     - Depth contribution: 0-60% (current severity)
     - Growth rate contribution: 0-30% (future risk)
     - Location contribution: 0-10% (context)
+    - Cluster boost: additive bump for clustered anomalies (capped at 1.0)
     """
     
     def __init__(
         self,
         depth_weight: float = 0.6,
         growth_weight: float = 0.3,
-        location_weight: float = 0.1
+        location_weight: float = 0.1,
+        cluster_boost: float = 0.1,
     ):
         """
         Initialize risk scorer with configurable weights.
@@ -34,6 +39,7 @@ class RiskScorer:
             depth_weight: Weight for depth contribution (default 0.6)
             growth_weight: Weight for growth rate contribution (default 0.3)
             location_weight: Weight for location contribution (default 0.1)
+            cluster_boost: Additive risk boost for clustered anomalies (default 0.1)
         """
         # Validate weights sum to 1.0
         total = depth_weight + growth_weight + location_weight
@@ -43,6 +49,7 @@ class RiskScorer:
         self.depth_weight = depth_weight
         self.growth_weight = growth_weight
         self.location_weight = location_weight
+        self.cluster_boost = cluster_boost
     
     def calculate_location_factor(
         self,
@@ -124,6 +131,10 @@ class RiskScorer:
         """
         Calculate risk score for a single anomaly.
         
+        If the anomaly has a non-null ``cluster_id`` (i.e. it belongs to an
+        ASME B31G interaction zone), an additive ``cluster_boost`` is applied
+        to the composite risk score (capped at 1.0).
+        
         Args:
             anomaly: Anomaly record
             growth_metrics: Growth metrics (if available)
@@ -146,6 +157,13 @@ class RiskScorer:
             growth_rate,
             location_factor
         )
+
+        # Apply cluster boost if anomaly is in an interaction zone
+        is_clustered = getattr(anomaly, "cluster_id", None) is not None
+        cluster_contribution = 0.0
+        if is_clustered:
+            cluster_contribution = self.cluster_boost
+            risk_score = min(risk_score + cluster_contribution, 1.0)
         
         return {
             'anomaly_id': anomaly.id,
@@ -155,7 +173,9 @@ class RiskScorer:
             'location_factor': location_factor,
             'depth_contribution': (anomaly.depth_pct / 100.0) * self.depth_weight,
             'growth_contribution': min(growth_rate / 10.0, 1.0) * self.growth_weight,
-            'location_contribution': location_factor * self.location_weight
+            'location_contribution': location_factor * self.location_weight,
+            'cluster_contribution': cluster_contribution,
+            'is_clustered': is_clustered,
         }
     
     def score_anomalies(

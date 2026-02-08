@@ -5,7 +5,7 @@ API Response Models
 Pydantic models for all API responses (JSON serializable).
 """
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional, List, Dict, Any, Literal
 from datetime import datetime
 
@@ -84,6 +84,23 @@ class ThreeWayAnalysisResponse(BaseModel):
     immediate_action_count: int
     avg_growth_rate_07_15: float
     avg_growth_rate_15_22: float
+    # DTW correction status
+    dtw_applied_07_15: bool = Field(
+        default=False,
+        description="Whether DTW distance correction was applied for 2007-2015 interval",
+    )
+    dtw_applied_15_22: bool = Field(
+        default=False,
+        description="Whether DTW distance correction was applied for 2015-2022 interval",
+    )
+    dtw_fallback_reason_07_15: Optional[str] = Field(
+        default=None,
+        description="Reason for DTW fallback on 2007-2015 interval (None if successful)",
+    )
+    dtw_fallback_reason_15_22: Optional[str] = Field(
+        default=None,
+        description="Reason for DTW fallback on 2015-2022 interval (None if successful)",
+    )
     chains: List[ChainResponse] = Field(default_factory=list)
     explanations: List[ChainExplanationResponse] = Field(default_factory=list)
 
@@ -230,6 +247,32 @@ class RiskRankingResponse(BaseModel):
     high_count: int
 
 
+# ─── Cluster / Interaction Zone Responses ─────────────────────────────
+
+class InteractionZoneResponse(BaseModel):
+    """A single ASME B31G interaction zone (cluster)."""
+    zone_id: str
+    run_id: str
+    anomaly_ids: List[str]
+    anomaly_count: int
+    centroid_distance: float
+    centroid_clock: float
+    span_distance_ft: float
+    span_clock: float
+    max_depth_pct: float
+    combined_length_in: float
+
+
+class ClustersListResponse(BaseModel):
+    """List of interaction zones for a run."""
+    run_id: str
+    zones: List[InteractionZoneResponse]
+    total_zones: int
+    clustered_anomaly_count: int
+    total_anomaly_count: int
+    clustered_pct: float
+
+
 # ─── Webhook Responses ────────────────────────────────────────────────
 
 class WebhookResponse(BaseModel):
@@ -240,13 +283,43 @@ class WebhookResponse(BaseModel):
     status_url: Optional[str] = None
 
 
+class WebAppAnomaly(BaseModel):
+    """
+    Anomaly record formatted for the webapp frontend.
+
+    Uses camelCase aliases so JSON output matches the webapp's
+    TypeScript ``Anomaly`` interface exactly.
+    """
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    feature_id: str = Field(..., alias="featureId")
+    distance: float
+    clock_position: float = Field(..., alias="clockPosition")
+    depth_percent: float = Field(..., alias="depthPercent")
+    length: float
+    width: float
+    risk_score: int = Field(..., alias="riskScore")
+    risk_level: Literal["Critical", "High", "Moderate", "Low"] = Field(
+        ..., alias="riskLevel"
+    )
+    action_required: str = Field(..., alias="actionRequired")
+    regulatory_basis: str = Field(..., alias="regulatoryBasis")
+    run_id: int = Field(..., alias="runId")
+    inspection_date: str = Field(..., alias="inspectionDate")
+    nominal_wall_thickness: float = Field(..., alias="nominalWallThickness")
+    pipeline_diameter: float = Field(..., alias="pipelineDiameter")
+    operating_pressure: float = Field(..., alias="operatingPressure")
+    material_grade: str = Field(..., alias="materialGrade")
+    growth_rate: Optional[float] = Field(None, alias="growthRate")
+
+
 class UploadResponse(BaseModel):
-    """Response from file upload."""
+    """Response from file upload (webapp-compatible)."""
     success: bool
-    message: str
-    run_id: str
-    anomaly_count: int
-    reference_point_count: int
+    anomalies: List[WebAppAnomaly] = Field(default_factory=list)
+    message: Optional[str] = None
+    error: Optional[str] = None
 
 
 # ─── Health Check ─────────────────────────────────────────────────────

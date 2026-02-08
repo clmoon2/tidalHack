@@ -15,6 +15,7 @@ The ILI Data Alignment System has **two modes of operation**:
 - ✅ Hungarian algorithm for matching
 - ✅ Mathematical similarity calculations
 - ✅ DTW alignment
+- ✅ DBSCAN clustering (ASME B31G interaction zones)
 - ✅ Deterministic risk scoring
 - ✅ XGBoost ML predictions
 
@@ -89,6 +90,7 @@ The ILI Data Alignment System has **two modes of operation**:
 | Feature | Standard | Agentic |
 |---------|----------|---------|
 | **Anomaly Matching** | ✅ Hungarian algorithm | ✅ Same + AI explanation |
+| **Interaction Zones** | ✅ DBSCAN clustering | ✅ Same + AI context |
 | **Match Rate** | ✅ 96.5% | ✅ 96.5% (same) |
 | **Speed** | ✅ <30s for 5K | ⚠️ +2-5s per explanation |
 | **Cost** | ✅ Free | ⚠️ ~$0.01-0.10 per explanation |
