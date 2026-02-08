@@ -5,6 +5,8 @@ API Response Models
 Pydantic models for all API responses (JSON serializable).
 """
 
+from __future__ import annotations
+
 from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional, List, Dict, Any, Literal
 from datetime import datetime
@@ -67,6 +69,20 @@ class ChainsListResponse(BaseModel):
     per_page: int = 50
 
 
+class InteractionZoneResponse(BaseModel):
+    """A single ASME B31G interaction zone (cluster)."""
+    zone_id: str
+    run_id: str
+    anomaly_ids: List[str]
+    anomaly_count: int
+    centroid_distance: float
+    centroid_clock: float
+    span_distance_ft: float
+    span_clock: float
+    max_depth_pct: float
+    combined_length_in: float
+
+
 class ThreeWayAnalysisResponse(BaseModel):
     """Complete three-way analysis result."""
     analysis_id: str
@@ -101,6 +117,12 @@ class ThreeWayAnalysisResponse(BaseModel):
         default=None,
         description="Reason for DTW fallback on 2015-2022 interval (None if successful)",
     )
+    # Clustering / interaction zone fields
+    interaction_zones_2007: List[InteractionZoneResponse] = Field(default_factory=list)
+    interaction_zones_2015: List[InteractionZoneResponse] = Field(default_factory=list)
+    interaction_zones_2022: List[InteractionZoneResponse] = Field(default_factory=list)
+    total_clusters: int = 0
+    clustered_anomaly_pct: float = 0.0
     chains: List[ChainResponse] = Field(default_factory=list)
     explanations: List[ChainExplanationResponse] = Field(default_factory=list)
 
@@ -248,20 +270,6 @@ class RiskRankingResponse(BaseModel):
 
 
 # ─── Cluster / Interaction Zone Responses ─────────────────────────────
-
-class InteractionZoneResponse(BaseModel):
-    """A single ASME B31G interaction zone (cluster)."""
-    zone_id: str
-    run_id: str
-    anomaly_ids: List[str]
-    anomaly_count: int
-    centroid_distance: float
-    centroid_clock: float
-    span_distance_ft: float
-    span_clock: float
-    max_depth_pct: float
-    combined_length_in: float
-
 
 class ClustersListResponse(BaseModel):
     """List of interaction zones for a run."""

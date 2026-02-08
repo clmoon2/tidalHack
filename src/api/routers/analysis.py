@@ -18,6 +18,7 @@ from src.api.schemas.responses import (
     AnalysisStatusResponse,
     ChainResponse,
     ChainExplanationResponse,
+    InteractionZoneResponse,
 )
 
 router = APIRouter()
@@ -87,6 +88,25 @@ def _run_analysis_background(analysis_id: str, request: ThreeWayAnalysisRequest,
             for e in result.explanations
         ]
 
+        # Build interaction zone responses
+        def _zone_to_response(z):
+            return InteractionZoneResponse(
+                zone_id=z.zone_id,
+                run_id=z.run_id,
+                anomaly_ids=z.anomaly_ids,
+                anomaly_count=z.anomaly_count,
+                centroid_distance=z.centroid_distance,
+                centroid_clock=z.centroid_clock,
+                span_distance_ft=z.span_distance_ft,
+                span_clock=z.span_clock,
+                max_depth_pct=z.max_depth_pct,
+                combined_length_in=z.combined_length_in,
+            )
+
+        zones_2007 = [_zone_to_response(z) for z in result.interaction_zones_2007]
+        zones_2015 = [_zone_to_response(z) for z in result.interaction_zones_2015]
+        zones_2022 = [_zone_to_response(z) for z in result.interaction_zones_2022]
+
         response = ThreeWayAnalysisResponse(
             analysis_id=analysis_id,
             status="COMPLETE",
@@ -107,6 +127,11 @@ def _run_analysis_background(analysis_id: str, request: ThreeWayAnalysisRequest,
             dtw_applied_15_22=result.dtw_applied_15_22,
             dtw_fallback_reason_07_15=result.dtw_fallback_reason_07_15,
             dtw_fallback_reason_15_22=result.dtw_fallback_reason_15_22,
+            interaction_zones_2007=zones_2007,
+            interaction_zones_2015=zones_2015,
+            interaction_zones_2022=zones_2022,
+            total_clusters=result.total_clusters,
+            clustered_anomaly_pct=result.clustered_anomaly_pct,
             chains=chains,
             explanations=explanations,
         )

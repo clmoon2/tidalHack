@@ -776,6 +776,19 @@ class ThreeWayAnalyzer:
                 "matched_15_22": result.matched_15_22,
                 "total_chains": result.total_chains,
             },
+            "dtw_correction": {
+                "dtw_applied_07_15": result.dtw_applied_07_15,
+                "dtw_applied_15_22": result.dtw_applied_15_22,
+                "dtw_fallback_reason_07_15": result.dtw_fallback_reason_07_15,
+                "dtw_fallback_reason_15_22": result.dtw_fallback_reason_15_22,
+            },
+            "clustering": {
+                "total_clusters": result.total_clusters,
+                "clustered_anomaly_pct": result.clustered_anomaly_pct,
+                "interaction_zones_2007": len(result.interaction_zones_2007),
+                "interaction_zones_2015": len(result.interaction_zones_2015),
+                "interaction_zones_2022": len(result.interaction_zones_2022),
+            },
             "trends": {
                 "accelerating": result.accelerating_count,
                 "stable": result.stable_count,
